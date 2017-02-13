@@ -707,6 +707,7 @@
 				BDAD84971E3E701C008289AE /* Controller+UIScrollViewDelegate.swift */,
 				BDAD84981E3E701C008289AE /* DataSource+iOS+Extensions.swift */,
 				BDAD84991E3E701C008289AE /* Delegate+iOS+Extensions.swift */,
+				BDB8D5991E51C4FE00220BC3 /* Delegate+iOS+UIScrollView.swift */,
 				BDAD849A1E3E701C008289AE /* Gridable+Extensions+iOS.swift */,
 				BDAD849B1E3E701C008289AE /* Inset+iOS.swift */,
 				BDAD849D1E3E701C008289AE /* Layout+iOS.swift */,
@@ -714,7 +715,6 @@
 				BDAD849F1E3E701C008289AE /* UICollectionView+UserInterface.swift */,
 				BDAD84A01E3E701C008289AE /* UITableView+UserInterface.swift */,
 				BDAD84A11E3E701C008289AE /* UIViewController+Extensions.swift */,
-				BDB8D5991E51C4FE00220BC3 /* Delegate+iOS+UIScrollView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
