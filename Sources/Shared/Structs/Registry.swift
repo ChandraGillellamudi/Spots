@@ -91,7 +91,6 @@ public struct Registry {
           return (type: registryType, view: view)
         }
       #endif
-
       view = classType.init(frame: parentFrame)
     case .nib(let nib):
       registryType = .nib

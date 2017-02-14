@@ -68,6 +68,7 @@ public class Spot: NSObject, Spotable {
       if componentKind == .carousel {
         self.component.interaction.scrollDirection = .horizontal
         collectionViewLayout.scrollDirection = .horizontal
+        collectionView.showsHorizontalScrollIndicator = false
       }
 
       self.view = collectionView
@@ -337,5 +338,49 @@ public class Spot: NSObject, Spotable {
 
   public func register() {
 
+  }
+
+  /// Scroll to a specific item based on predicate.
+  ///
+  /// - parameter predicate: A predicate closure to determine which item to scroll to
+  public func scrollTo(_ predicate: (Item) -> Bool) {
+    guard let collectionView = self.collectionView,
+    let collectionViewLayout = collectionView.collectionViewLayout as? GridableLayout
+      else {
+        return
+    }
+
+    if let index = items.index(where: predicate) {
+      let pageWidth: CGFloat = collectionView.frame.size.width - collectionViewLayout.sectionInset.right
+        + collectionViewLayout.sectionInset.left
+
+      collectionView.setContentOffset(CGPoint(x: pageWidth * CGFloat(index), y:0), animated: true)
+
+      guard let item = item(at: index) else {
+        return
+      }
+
+      carouselScrollDelegate?.spotableCarouselDidEndScrolling(self, item: item)
+    }
+  }
+
+  /// Scrolls the collection view contents until the specified item is visible.
+  ///
+  /// - parameter index: The index path of the item to scroll into view.
+  /// - parameter position: An option that specifies where the item should be positioned when scrolling finishes.
+  /// - parameter animated: Specify true to animate the scrolling behavior or false to adjust the scroll view’s visible content immediately.
+  public func scrollTo(index: Int, position: UICollectionViewScrollPosition = .centeredHorizontally, animated: Bool = true) {
+    guard let collectionView = self.collectionView else {
+      return
+    }
+
+    collectionView.scrollToItem(at: IndexPath(item: index, section: 0),
+                                at: position, animated: animated)
+
+    guard let item = item(at: index) else {
+      return
+    }
+
+    carouselScrollDelegate?.spotableCarouselDidEndScrolling(self, item: item)
   }
 }

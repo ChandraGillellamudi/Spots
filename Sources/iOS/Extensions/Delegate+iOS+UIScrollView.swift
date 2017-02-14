@@ -55,14 +55,30 @@ extension Delegate: UIScrollViewDelegate {
     default:
       break
     }
-  }
 
-  public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-    guard let spot = spot as? CarouselSpot else {
+    guard let item = spot.item(at: itemIndex) else {
       return
     }
 
-    spot.carouselScrollDelegate?.spotableCarouselDidEndScrollingAnimated(spot)
+    switch spot {
+    case let spot as Spot:
+      spot.carouselScrollDelegate?.spotableCarouselDidEndScrolling(spot, item: item)
+    case let spot as CarouselSpot:
+      spot.carouselScrollDelegate?.spotableCarouselDidEndScrolling(spot, item: item)
+    default:
+      break
+    }
+  }
+
+  public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+    switch spot {
+    case let spot as Spot:
+      spot.carouselScrollDelegate?.spotableCarouselDidEndScrollingAnimated(spot)
+    case let spot as CarouselSpot:
+      spot.carouselScrollDelegate?.spotableCarouselDidEndScrollingAnimated(spot)
+    default:
+      break
+    }
   }
 
   /// Tells the delegate when the user finishes scrolling the content.

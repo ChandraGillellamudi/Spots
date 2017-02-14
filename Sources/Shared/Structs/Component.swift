@@ -108,7 +108,7 @@ public struct Component: Mappable, Equatable, DictionaryConvertible {
   /// A key-value dictionary for any additional information
   public var meta = [String: Any]()
   /// Delcares if the Component uses core types or Spot class as it's base class.
-  public var isHybrid: Bool = false
+  public var isHybrid: Bool = true
 
   /// A dictionary representation of the component
   public var dictionary: [String : Any] {
@@ -226,7 +226,7 @@ public struct Component: Mappable, Equatable, DictionaryConvertible {
               span: Double? = nil,
               items: [Item] = [],
               meta: [String : Any] = [:],
-              hybrid: Bool = false) {
+              hybrid: Bool = true) {
     self.identifier = identifier
     self.title = title
     self.kind = kind

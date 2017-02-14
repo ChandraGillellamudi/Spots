@@ -1,5 +1,6 @@
 public protocol Wrappable: class {
 
+  var frame: CGRect { get }
   var contentView: View { get }
   var wrappedView: View? { get set }
 
