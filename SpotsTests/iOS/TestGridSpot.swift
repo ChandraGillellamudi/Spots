@@ -68,7 +68,7 @@ class GridSpotTests: XCTestCase {
       exception?.fulfill()
       exception = nil
     }
-    waitForExpectations(timeout: 0.5, handler: nil)
+    waitForExpectations(timeout: 10.0, handler: nil)
   }
 
   func testAppendItems() {
@@ -80,7 +80,7 @@ class GridSpotTests: XCTestCase {
       exception?.fulfill()
       exception = nil
     }
-    waitForExpectations(timeout: 0.5, handler: nil)
+    waitForExpectations(timeout: 10.0, handler: nil)
   }
 
   func testInsertItem() {
@@ -92,7 +92,7 @@ class GridSpotTests: XCTestCase {
       exception?.fulfill()
       exception = nil
     }
-    waitForExpectations(timeout: 0.5, handler: nil)
+    waitForExpectations(timeout: 10.0, handler: nil)
   }
 
   func testPrependItems() {
@@ -104,7 +104,7 @@ class GridSpotTests: XCTestCase {
       exception?.fulfill()
       exception = nil
     }
-    waitForExpectations(timeout: 0.5, handler: nil)
+    waitForExpectations(timeout: 10.0, handler: nil)
   }
 
   func testSpotCollectionDelegate() {
@@ -126,14 +126,14 @@ class GridSpotTests: XCTestCase {
     }
 
     var exception: XCTestExpectation? = self.expectation(description: "Wait for cache")
-    Dispatch.after(seconds: 0.25) {
+    Dispatch.after(seconds: 2.5) {
       let cachedSpot = GridSpot(cacheKey: self.cachedSpot.stateCache!.key)
       XCTAssertEqual(cachedSpot.component.items.count, 1)
       cachedSpot.stateCache?.clear()
       exception?.fulfill()
       exception = nil
     }
-    waitForExpectations(timeout: 0.5, handler: nil)
+    waitForExpectations(timeout: 10.0, handler: nil)
   }
 
   func testSpotConfigurationClosure() {
