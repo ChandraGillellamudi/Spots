@@ -5,12 +5,11 @@ public extension Wrappable {
       previousView.removeFromSuperview()
     }
 
-    view.frame.size = frame.size
+    view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    view.frame = bounds
+    view.isUserInteractionEnabled = false
 
-    configureWrappedView()
     contentView.addSubview(view)
     self.wrappedView = view
   }
-
-  func configureWrappedView() {}
 }
