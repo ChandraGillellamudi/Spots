@@ -10,6 +10,13 @@ class GridWrapper: UICollectionViewCell, Wrappable {
     wrappedView?.frame.size = contentView.bounds.size
   }
 
+  func configureWrappedView() {
+    if let cell = wrappedView as? UICollectionViewCell {
+      cell.contentView.frame = contentView.frame
+      cell.isUserInteractionEnabled = false
+    }
+  }
+
   override func prepareForReuse() {
     wrappedView?.removeFromSuperview()
   }
