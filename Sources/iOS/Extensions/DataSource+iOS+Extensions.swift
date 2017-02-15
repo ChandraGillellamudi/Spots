@@ -128,7 +128,7 @@ extension DataSource: UICollectionViewDataSource {
 
     switch cell {
     case let cell as GridWrapper:
-      prepareWrappableView(cell, atIndex: indexPath.item, in: spot)
+      prepareWrappableView(cell, atIndex: indexPath.item, in: spot, parentFrame: cell.bounds)
     case let cell as Composable:
       prepareComposableView(cell, atIndex: indexPath.item, in: spot)
     case let cell as ItemConfigurable:
@@ -176,7 +176,7 @@ extension DataSource: UITableViewDataSource {
 
     switch cell {
     case let cell as ListWrapper:
-      prepareWrappableView(cell, atIndex: indexPath.item, in: spot, parentFrame: cell.frame)
+      prepareWrappableView(cell, atIndex: indexPath.item, in: spot, parentFrame: cell.bounds)
     case let cell as Composable:
       prepareComposableView(cell, atIndex: indexPath.row, in: spot)
     case let cell as ItemConfigurable:
