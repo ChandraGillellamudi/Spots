@@ -43,17 +43,7 @@ open class Controller: UIViewController, SpotsProtocol, SpotsFocusDelegate, UISc
 
   /// A collection of Spotable objects.
   open var spots: [Spotable] {
-    didSet {
-      spots.forEach {
-        $0.delegate = delegate
-        $0.focusDelegate = self
-
-        $0.compositeSpots.forEach {
-          $0.spot.focusDelegate = self
-        }
-      }
-      delegate?.spotablesDidChange(spots)
-    }
+    didSet { spotsDidChange() }
   }
 
   /// An array of refresh positions to avoid refreshing multiple times when using infinite scrolling.
@@ -77,10 +67,7 @@ open class Controller: UIViewController, SpotsProtocol, SpotsFocusDelegate, UISc
 
   /// A delegate for when an item is tapped within a Spot.
   weak open var delegate: SpotsDelegate? {
-    didSet {
-      spots.forEach { $0.delegate = delegate }
-      delegate?.spotablesDidChange(spots)
-    }
+    didSet { spotsDelegateDidChange() }
   }
 
   #if os(iOS)
@@ -348,6 +335,27 @@ open class Controller: UIViewController, SpotsProtocol, SpotsFocusDelegate, UISc
 
 /// An extension with private methods on Controller
 extension Controller {
+
+  fileprivate func spotsDelegateDidChange() {
+    updateDelegates()
+  }
+
+  fileprivate  func spotsDidChange() {
+    updateDelegates()
+    delegate?.spotablesDidChange(spots)
+  }
+
+  fileprivate  func updateDelegates() {
+    spots.forEach {
+      $0.delegate = delegate
+      $0.focusDelegate = self
+
+      $0.compositeSpots.forEach {
+        $0.spot.delegate = delegate
+        $0.spot.focusDelegate = self
+      }
+    }
+  }
 
   /// Resolve component at index path.
   ///
