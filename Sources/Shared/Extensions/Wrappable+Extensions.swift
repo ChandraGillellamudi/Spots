@@ -7,9 +7,11 @@ public extension Wrappable {
 
     view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     view.frame = bounds
-    view.isUserInteractionEnabled = false
+    self.wrappedView = view
+    configureWrappedView()
 
     contentView.addSubview(view)
-    self.wrappedView = view
   }
+
+  func configureWrappedView() {}
 }
