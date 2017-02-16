@@ -18,8 +18,8 @@ class TestSpot: XCTestCase {
 
     spot.setup(CGSize(width: 100, height: 100))
 
-    XCTAssertTrue(spot.view is TableView)
-    XCTAssertTrue(spot.view.isEqual(spot.tableView))
+    XCTAssertNotNil(spot.view)
+    XCTAssertNotNil(spot.tableView)
     XCTAssertEqual(spot.items[0].size, CGSize(width: 100, height: 44))
     XCTAssertEqual(spot.items[1].size, CGSize(width: 100, height: 44))
     XCTAssertEqual(spot.view.frame.size, CGSize(width: 100, height: 100))
@@ -30,6 +30,8 @@ class TestSpot: XCTestCase {
     #if os(tvOS)
       let expectedContentSizeHeight: CGFloat = 116
     #elseif os(iOS)
+      let expectedContentSizeHeight: CGFloat = 88
+    #elseif os(macOS)
       let expectedContentSizeHeight: CGFloat = 88
     #endif
     XCTAssertEqual(spot.view.contentSize, CGSize(width: 100, height: expectedContentSizeHeight))
@@ -156,6 +158,8 @@ class TestSpot: XCTestCase {
       let expectedContentSizeHeight: CGFloat = 332
     #elseif os(iOS)
       let expectedContentSizeHeight: CGFloat = 276
+    #elseif os(macOS)
+      let expectedContentSizeHeight: CGFloat = 88
     #endif
     XCTAssertEqual(spot.view.contentSize, CGSize(width: 100, height: expectedContentSizeHeight))
   }

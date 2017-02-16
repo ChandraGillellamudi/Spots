@@ -40,4 +40,11 @@ extension Listable {
     layout(CGSize(width: tableView.frame.width, height: computedHeight ))
     completion?()
   }
+
+  public func sizeForItem(at indexPath: IndexPath) -> CGSize {
+    return CGSize(
+      width:  item(at: indexPath)?.size.width  ?? 0.0,
+      height: item(at: indexPath)?.size.height ?? 0.0
+    )
+  }
 }
