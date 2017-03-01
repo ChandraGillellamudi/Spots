@@ -6,6 +6,8 @@ public enum ControllerBackground {
 
 open class Controller: NSViewController, SpotsProtocol {
 
+  private var layoutInProcess: Bool = false
+
   /// A closure that is called when the controller is reloaded with components
   public static var spotsDidReloadComponents: ((Controller) -> Void)?
 
@@ -263,24 +265,39 @@ open class Controller: NSViewController, SpotsProtocol {
   }
 
   public func windowDidResize(_ notification: Notification) {
-    for case let spot as Gridable in spots {
-      guard let layout = spot.component.layout, layout.span > 1 else {
-        continue
+    spots.forEach { layoutSpot($0) }
+    scrollView.layoutSubviews()
+  }
+
+  public func windowDidEndLiveResize(_ notification: Notification) {
+    spots.forEach { layoutSpot($0) }
+  }
+
+  fileprivate func delayedLayout() {
+    layoutInProcess = true
+    spots.forEach {
+      layoutSpot($0)
+    }
+    layoutInProcess = false
+  }
+
+  fileprivate func layoutSpot(_ spot: Spotable) {
+    switch spot {
+    case let spot as Spot:
+      guard let layout = spot.component.layout, layout.span >= 1 else {
+        break
+      }
+
+      spot.setup(spot.view.frame.size)
+    case let spot as Gridable:
+      guard let layout = spot.component.layout, layout.span >= 1 else {
+        break
       }
 
       spot.layout.prepareForTransition(from: spot.layout)
       spot.layout.invalidateLayout()
-    }
-  }
-
-  public func windowDidEndLiveResize(_ notification: Notification) {
-    for case let spot as Gridable in spots {
-      guard let layout = spot.component.layout, layout.span > 1 else {
-        continue
-      }
-
-      spot.layout.prepareForTransition(to: spot.layout)
-      spot.layout.invalidateLayout()
+    default:
+      break
     }
   }
 
