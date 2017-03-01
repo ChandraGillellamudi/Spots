@@ -212,6 +212,7 @@ public class Spot: NSObject, Spotable {
       if componentKind == .carousel {
 //        collectionView.showsHorizontalScrollIndicator = false
         self.component.interaction.scrollDirection = .horizontal
+        (collectionViewLayout as? FlowLayout)?.scrollDirection = .horizontal
       }
 
       userInterface = collectionView
