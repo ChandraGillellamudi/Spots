@@ -738,7 +738,6 @@ extension SpotsProtocol {
   }
 
   func setupAndLayoutSpot(spot: Spotable) {
-
     switch spot {
     case let spot as Gridable:
       #if !os(OSX)
