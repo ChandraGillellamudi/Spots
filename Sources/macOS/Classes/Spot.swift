@@ -382,6 +382,9 @@ public class Spot: NSObject, Spotable {
       $0.size.height > $1.size.height
     }).first?.size.height
 
+    scrollView.scrollingEnabled = (component.items.count > 1)
+    scrollView.hasHorizontalScroller = (component.items.count > 1)
+
     collectionView.frame.size.height = newCollectionViewHeight + headerHeight + footerHeight
     CarouselSpot.configure?(collectionView)
   }
