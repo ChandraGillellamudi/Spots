@@ -739,6 +739,20 @@ extension SpotsProtocol {
 
   func setupAndLayoutSpot(spot: Spotable) {
     switch spot {
+    case let spot as Spot:
+      #if !os(OSX)
+        guard spot.layout.scrollDirection == .horizontal else {
+          fallthrough
+        }
+      #endif
+
+      if let collectionView = spot.collectionView,
+        let collectionViewLayout = collectionView.collectionViewLayout as? FlowLayout {
+        collectionViewLayout.prepare()
+        collectionViewLayout.invalidateLayout()
+        collectionView.frame.size.width = collectionViewLayout.collectionViewContentSize.width
+        collectionView.frame.size.height = collectionViewLayout.collectionViewContentSize.height
+      }
     case let spot as Gridable:
       #if !os(OSX)
         guard spot.layout.scrollDirection == .horizontal else {
