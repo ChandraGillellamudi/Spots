@@ -240,6 +240,7 @@ open class Controller: NSViewController, SpotsProtocol {
       height: ceil(spot.view.frame.height))
 
     (spot as? Gridable)?.layout(CGSize(width: view.frame.width, height: height))
+    (spot as? Spot)?.layout(CGSize(width: view.frame.width, height: height))
   }
 
   open override func viewDidLayout() {
