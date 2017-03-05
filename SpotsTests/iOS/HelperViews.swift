@@ -1,4 +1,5 @@
 import UIKit
+import Spots
 
 class HeaderView: View, ItemConfigurable, Componentable {
 
@@ -119,17 +120,19 @@ class TextView: View, ItemConfigurable {
 class CustomListCell: View, ItemConfigurable {
 
   var preferredViewSize: CGSize = CGSize(width: 0, height: 44)
+  lazy var textLabel = UITextField()
 
   func configure(_ item: inout Item) {
-    textLabel?.text = item.text
+    textLabel.text = item.text
   }
 }
 
 class CustomListHeaderView: View, Componentable {
   var preferredHeaderHeight: CGFloat = 88
+  lazy var textLabel = UITextField()
 
   func configure(_ component: Component) {
-    textLabel?.text = component.title
+    textLabel.text = component.title
   }
 }
 
