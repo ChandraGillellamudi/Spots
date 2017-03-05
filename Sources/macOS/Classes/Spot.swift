@@ -172,11 +172,7 @@ public class Spot: NSObject, Spotable {
     return lineView
   }()
 
-  open lazy var scrollView: ScrollView = {
-    let scrollView = ScrollView()
-    scrollView.documentView = NSView()
-    return scrollView
-  }()
+  open lazy var scrollView: ScrollView = ScrollView()
 
   public var view: ScrollView {
     return scrollView
@@ -290,8 +286,10 @@ public class Spot: NSObject, Spotable {
     }
 
     if let tableView = self.tableView {
+      scrollView.documentView = tableView
       setupTableView(tableView, with: size)
     } else if let collectionView = self.collectionView {
+      scrollView.documentView = collectionView
       setupCollectionView(collectionView, with: size)
     }
 
@@ -346,7 +344,6 @@ public class Spot: NSObject, Spotable {
   }
 
   fileprivate func setupCollectionView(_ collectionView: CollectionView, with size: CGSize) {
-    scrollView.contentView.addSubview(collectionView)
     collectionView.frame.size = size
     prepareItems()
 
@@ -412,6 +409,9 @@ public class Spot: NSObject, Spotable {
       return
     }
 
+    collectionViewLayout.prepare()
+    collectionViewLayout.invalidateLayout()
+
     scrollView.frame.size.width = size.width
     scrollView.frame.size.height = collectionView.frame.height + scrollView.contentInsets.top + scrollView.contentInsets.bottom
   }
@@ -423,6 +423,7 @@ public class Spot: NSObject, Spotable {
 
     collectionViewLayout.prepare()
     collectionViewLayout.invalidateLayout()
+
     let layoutInsets = EdgeInsets()
 
     var layoutHeight = collectionViewLayout.collectionViewContentSize.height + layoutInsets.top + layoutInsets.bottom + headerHeight + footerHeight
