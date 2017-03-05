@@ -741,8 +741,14 @@ extension SpotsProtocol {
     switch spot {
     case let spot as Spot:
       #if !os(OSX)
-        guard spot.layout.scrollDirection == .horizontal else {
-          fallthrough
+        guard spot.component.interaction.scrollDirection == .horizontal else {
+          spot.setup(scrollView.frame.size)
+          spot.component.size = CGSize(
+            width: spot.view.frame.size.width,
+            height: ceil(spot.view.frame.size.height))
+          spot.layout(scrollView.frame.size)
+          spot.view.layoutSubviews()
+          return
         }
       #endif
 
