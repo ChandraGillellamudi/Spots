@@ -312,6 +312,7 @@
 		BDB8D5971E4DFBBA00220BC3 /* Tailor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D58478F71C44076B006EBA49 /* Tailor.framework */; };
 		BDB8D5981E4DFBC300220BC3 /* Tailor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDD63FAB1D941A80008E885A /* Tailor.framework */; };
 		BDB8D59A1E51C4FE00220BC3 /* Delegate+iOS+UIScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB8D5991E51C4FE00220BC3 /* Delegate+iOS+UIScrollView.swift */; };
+		BDBADAAD1E6DE88200C4F931 /* GridableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDBADAAC1E6DE88200C4F931 /* GridableLayout.swift */; };
 		BDCFCD421DCA7EFF0047E84C /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCFCD401DCA7EFF0047E84C /* TestController.swift */; };
 		BDCFCD431DCA7EFF0047E84C /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCFCD401DCA7EFF0047E84C /* TestController.swift */; };
 		BDCFCD441DCA7F830047E84C /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCFCD401DCA7EFF0047E84C /* TestController.swift */; };
@@ -566,6 +567,7 @@
 		BDB648551D75EF150041449A /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
 		BDB8D5921E4DFADC00220BC3 /* TestItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestItem.swift; sourceTree = "<group>"; };
 		BDB8D5991E51C4FE00220BC3 /* Delegate+iOS+UIScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Delegate+iOS+UIScrollView.swift"; sourceTree = "<group>"; };
+		BDBADAAC1E6DE88200C4F931 /* GridableLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridableLayout.swift; sourceTree = "<group>"; };
 		BDCFCD401DCA7EFF0047E84C /* TestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
 		BDD35B9C1E54BDC4004C768E /* HelperViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperViews.swift; sourceTree = "<group>"; };
 		BDD35B9F1E54BDF2004C768E /* HelperViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperViews.swift; sourceTree = "<group>"; };
@@ -788,6 +790,7 @@
 				BD2403101E4B9A02005BAA19 /* Spot.swift */,
 				BDAD84F71E3E7025008289AE /* SpotsContentView.swift */,
 				BDAD84F81E3E7025008289AE /* SpotsScrollView.swift */,
+				BDBADAAC1E6DE88200C4F931 /* GridableLayout.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1873,6 +1876,7 @@
 				BDAD85221E3E7025008289AE /* Listable+macOS+Extensions.swift in Sources */,
 				BDAD85CD1E3E7032008289AE /* Viewable.swift in Sources */,
 				BDAD85141E3E7025008289AE /* ListSpotCell.swift in Sources */,
+				BDBADAAD1E6DE88200C4F931 /* GridableLayout.swift in Sources */,
 				52CD427B1E4477C800187E09 /* PageIndicatorPlacement.swift in Sources */,
 				BDAD85AC1E3E7032008289AE /* Composable.swift in Sources */,
 				BDAD85DF1E3E7032008289AE /* Inset.swift in Sources */,
