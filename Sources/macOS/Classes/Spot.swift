@@ -364,7 +364,7 @@ public class Spot: NSObject, Spotable {
     scrollView.scrollingEnabled = (component.items.count > 1)
     scrollView.hasHorizontalScroller = (component.items.count > 1)
 
-    collectionView.frame.size.height = newCollectionViewHeight + headerHeight + footerHeight
+    collectionView.frame.size.height = newCollectionViewHeight
     CarouselSpot.configure?(collectionView)
   }
 
@@ -375,7 +375,7 @@ public class Spot: NSObject, Spotable {
   fileprivate func layoutTableView(_ tableView: TableView, with size: CGSize) {
     tableView.sizeToFit()
     scrollView.frame.size.width = size.width
-    scrollView.frame.size.height = tableView.frame.height + scrollView.contentInsets.top + scrollView.contentInsets.bottom + headerHeight + footerHeight
+    scrollView.frame.size.height = tableView.frame.height
   }
 
   fileprivate func layoutCollectionView(_ collectionView: CollectionView, with size: CGSize) {
@@ -395,7 +395,7 @@ public class Spot: NSObject, Spotable {
     collectionViewLayout.invalidateLayout()
 
     scrollView.frame.size.width = size.width
-    scrollView.frame.size.height = collectionView.frame.height + scrollView.contentInsets.top + scrollView.contentInsets.bottom
+    scrollView.frame.size.height = collectionView.frame.height
   }
 
   fileprivate func layoutVerticalCollectionView(_ collectionView: CollectionView, with size: CGSize) {
@@ -408,7 +408,7 @@ public class Spot: NSObject, Spotable {
 
     let layoutInsets = EdgeInsets()
 
-    var layoutHeight = collectionViewLayout.collectionViewContentSize.height + layoutInsets.top + layoutInsets.bottom + headerHeight + footerHeight
+    var layoutHeight = collectionViewLayout.collectionViewContentSize.height + layoutInsets.top + layoutInsets.bottom
 
     if component.items.isEmpty {
       layoutHeight = size.height + layoutInsets.top + layoutInsets.bottom
@@ -416,7 +416,7 @@ public class Spot: NSObject, Spotable {
 
     scrollView.frame.size.width = size.width - layoutInsets.right
     scrollView.frame.size.height = layoutHeight
-    collectionView.frame.size.height = scrollView.frame.size.height - layoutInsets.top + layoutInsets.bottom
+    collectionView.frame.size.height = layoutHeight
     collectionView.frame.size.width = size.width - layoutInsets.right
   }
 
@@ -503,7 +503,6 @@ public class Spot: NSObject, Spotable {
   }
 
   fileprivate func configureHeaderFooterComponentKey(_ key: Component.Key, with size: CGSize) -> CGFloat {
-
     let identifier: String
 
     switch key {
