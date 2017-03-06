@@ -134,7 +134,8 @@ public class Spot: NSObject, Spotable {
     }
   }
 
-  open lazy var scrollView: ScrollView = ScrollView()
+  open lazy var scrollView: ScrollView = ScrollView(documentView: self.documentView)
+  open lazy var documentView: FlippedView = FlippedView()
 
   public var view: ScrollView {
     return scrollView
@@ -238,6 +239,7 @@ public class Spot: NSObject, Spotable {
     type(of: self).configure?(view)
 
     setupHeader(kind: component.header)
+    setupFooter(kind: component.footer)
 
     if let layout = component.layout {
       scrollView.contentInsets.top = CGFloat(layout.inset.top)
@@ -247,10 +249,10 @@ public class Spot: NSObject, Spotable {
     }
 
     if let tableView = self.tableView {
-      scrollView.documentView = tableView
+      documentView.addSubview(tableView)
       setupTableView(tableView, with: size)
     } else if let collectionView = self.collectionView {
-      scrollView.documentView = collectionView
+      documentView.addSubview(collectionView)
       setupCollectionView(collectionView, with: size)
     }
 
@@ -260,11 +262,14 @@ public class Spot: NSObject, Spotable {
   public func layout(_ size: CGSize) {
     if let tableView = self.tableView {
       layoutTableView(tableView, with: size)
+      tableView.frame.origin.y = headerHeight
     } else if let collectionView = self.collectionView {
       layoutCollectionView(collectionView, with: size)
     }
 
     headerView?.frame.size.width = size.width
+    footerView?.frame.size.width = size.width
+    footerView?.frame.origin.y = scrollView.frame.height - footerHeight
 
     view.layoutSubviews()
   }
@@ -282,8 +287,25 @@ public class Spot: NSObject, Spotable {
         componentable.configure(component)
         headerView.frame.size = size
         self.headerView = headerView
-//        tableView?.addSubview(headerView)
-//        collectionView?.addSubview(headerView)
+        scrollView.addSubview(headerView)
+      }
+    }
+  }
+
+  fileprivate func setupFooter(kind: String) {
+    guard !component.footer.isEmpty, footerView == nil else {
+      return
+    }
+
+    if let (_, footerView) = Configuration.views.make(component.footer) {
+      if let footerView = footerView,
+        let componentable = footerView as? Componentable {
+        let size = CGSize(width: view.frame.width,
+                          height: componentable.preferredHeaderHeight)
+        componentable.configure(component)
+        footerView.frame.size = size
+        self.footerView = footerView
+        scrollView.addSubview(footerView)
       }
     }
   }
@@ -375,7 +397,8 @@ public class Spot: NSObject, Spotable {
   fileprivate func layoutTableView(_ tableView: TableView, with size: CGSize) {
     tableView.sizeToFit()
     scrollView.frame.size.width = size.width
-    scrollView.frame.size.height = tableView.frame.height
+    scrollView.frame.size.height = tableView.frame.height + headerHeight + footerHeight
+    documentView.frame.size = scrollView.frame.size
   }
 
   fileprivate func layoutCollectionView(_ collectionView: CollectionView, with size: CGSize) {
@@ -394,8 +417,23 @@ public class Spot: NSObject, Spotable {
     collectionViewLayout.prepare()
     collectionViewLayout.invalidateLayout()
 
-    scrollView.frame.size.width = size.width
-    scrollView.frame.size.height = collectionView.frame.height
+    if let collectionViewContentSize = collectionView.collectionViewLayout?.collectionViewContentSize {
+
+      var newCollectionViewHeight: CGFloat = 0.0
+
+      newCollectionViewHeight <- component.items.sorted(by: {
+        $0.size.height > $1.size.height
+      }).first?.size.height
+
+      var collectionViewContentSize = collectionViewContentSize
+      collectionView.frame.size.width = collectionViewContentSize.width
+      collectionView.frame.size.height = newCollectionViewHeight
+      collectionView.frame.origin.y = headerHeight
+      documentView.frame.size = collectionView.frame.size
+      documentView.frame.size.height = collectionView.frame.size.height
+      scrollView.frame.size.width = size.width
+      scrollView.frame.size.height = documentView.frame.size.height + headerHeight
+    }
   }
 
   fileprivate func layoutVerticalCollectionView(_ collectionView: CollectionView, with size: CGSize) {
@@ -403,21 +441,17 @@ public class Spot: NSObject, Spotable {
       return
     }
 
+    collectionView.frame.origin.y = headerHeight
     collectionViewLayout.prepare()
     collectionViewLayout.invalidateLayout()
 
-    let layoutInsets = EdgeInsets()
-
-    var layoutHeight = collectionViewLayout.collectionViewContentSize.height + layoutInsets.top + layoutInsets.bottom
-
-    if component.items.isEmpty {
-      layoutHeight = size.height + layoutInsets.top + layoutInsets.bottom
+    if let collectionViewContentSize = collectionView.collectionViewLayout?.collectionViewContentSize {
+      var collectionViewContentSize = collectionViewContentSize
+      collectionViewContentSize.height += headerHeight + footerHeight
+      collectionView.frame.size = collectionViewContentSize
+      documentView.frame.size = collectionViewContentSize
+      scrollView.frame.size.height = collectionView.frame.height
     }
-
-    scrollView.frame.size.width = size.width - layoutInsets.right
-    scrollView.frame.size.height = layoutHeight
-    collectionView.frame.size.height = layoutHeight
-    collectionView.frame.size.width = size.width - layoutInsets.right
   }
 
   func registerDefaultIfNeeded(view: View.Type) {
