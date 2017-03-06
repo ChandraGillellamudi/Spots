@@ -148,45 +148,19 @@ public class Spot: NSObject, Spotable {
     return userInterface as? CollectionView
   }
 
-  public required init(component: Component) {
-    var component = component
-    if component.kind.isEmpty {
-      component.kind = Spot.defaultKind
-    }
-
+  public required init(component: Component, userInterface: UserInterface, kind: Component.Kind) {
     self.component = component
-
-    if let componentKind = Component.Kind(rawValue: component.kind) {
-      self.componentKind = componentKind
-    }
-
-    if componentKind == .list {
-      userInterface = TableView()
-    } else {
-      let collectionView = CollectionView(frame: CGRect.zero)
-      let collectionViewLayout = Spot.setupLayout(component)
-      collectionView.collectionViewLayout = collectionViewLayout
-
-      if componentKind == .carousel {
-        self.component.interaction.scrollDirection = .horizontal
-        (collectionViewLayout as? FlowLayout)?.scrollDirection = .horizontal
-      }
-
-      userInterface = collectionView
-    }
-
-    userInterface?.register()
+    self.componentKind = kind
+    self.userInterface = userInterface
 
     super.init()
 
     if component.layout == nil {
-      switch componentKind {
+      switch kind {
       case .carousel:
         self.component.layout = CarouselSpot.layout
-//        registerDefaultIfNeeded(view: GridSpotItem.self)
       case .grid:
         self.component.layout = GridSpot.layout
-//        registerDefaultIfNeeded(view: GridSpotItem.self)
       case .list:
         self.component.layout = ListSpot.layout
         registerDefaultIfNeeded(view: ListSpotItem.self)
@@ -197,6 +171,8 @@ public class Spot: NSObject, Spotable {
       }
     }
 
+    userInterface.register()
+
     if let componentLayout = self.component.layout,
       let collectionViewLayout = collectionView?.collectionViewLayout as? FlowLayout {
       componentLayout.configure(collectionViewLayout: collectionViewLayout)
@@ -204,9 +180,30 @@ public class Spot: NSObject, Spotable {
 
     self.spotDataSource = DataSource(spot: self)
     self.spotDelegate = Delegate(spot: self)
+  }
 
-    if let componentLayout = component.layout {
-      configure(with: componentLayout)
+  public required convenience init(component: Component) {
+    var component = component
+    if component.kind.isEmpty {
+      component.kind = Spot.defaultKind
+    }
+
+    let kind = Component.Kind(rawValue: component.kind) ?? .list
+    let userInterface: UserInterface
+
+    if kind == .list {
+      userInterface = TableView()
+    } else {
+      let collectionView = CollectionView(frame: CGRect.zero)
+      collectionView.collectionViewLayout = Spot.setupLayout(component)
+      userInterface = collectionView
+    }
+
+    self.init(component: component, userInterface: userInterface, kind: kind)
+
+    if componentKind == .carousel {
+      self.component.interaction.scrollDirection = .horizontal
+      (collectionView?.collectionViewLayout as? FlowLayout)?.scrollDirection = .horizontal
     }
   }
 
