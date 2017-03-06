@@ -241,13 +241,6 @@ public class Spot: NSObject, Spotable {
     setupHeader(kind: component.header)
     setupFooter(kind: component.footer)
 
-    if let layout = component.layout {
-      scrollView.contentInsets.top = CGFloat(layout.inset.top)
-      scrollView.contentInsets.left = CGFloat(layout.inset.left)
-      scrollView.contentInsets.bottom = CGFloat(layout.inset.bottom)
-      scrollView.contentInsets.right = CGFloat(layout.inset.right)
-    }
-
     if let tableView = self.tableView {
       documentView.addSubview(tableView)
       setupTableView(tableView, with: size)
@@ -262,7 +255,6 @@ public class Spot: NSObject, Spotable {
   public func layout(_ size: CGSize) {
     if let tableView = self.tableView {
       layoutTableView(tableView, with: size)
-      tableView.frame.origin.y = headerHeight
     } else if let collectionView = self.collectionView {
       layoutCollectionView(collectionView, with: size)
     }
@@ -311,14 +303,23 @@ public class Spot: NSObject, Spotable {
   }
 
   fileprivate func setupTableView(_ tableView: TableView, with size: CGSize) {
-    scrollView.contentView.addSubview(tableView)
+    if let layout = component.layout {
+      scrollView.contentInsets.top = CGFloat(layout.inset.top)
+      scrollView.contentInsets.left = CGFloat(layout.inset.left)
+      scrollView.contentInsets.bottom = CGFloat(layout.inset.bottom)
+      scrollView.contentInsets.right = CGFloat(layout.inset.right)
+    }
+
+    scrollView.addSubview(tableView)
 
     component.items.enumerated().forEach {
       component.items[$0.offset].size.width = size.width
     }
 
     tableView.frame.size = size
+
     prepareItems()
+
     tableView.dataSource = spotDataSource
     tableView.delegate = spotDelegate
     tableView.backgroundColor = NSColor.clear
@@ -349,6 +350,7 @@ public class Spot: NSObject, Spotable {
 
   fileprivate func setupCollectionView(_ collectionView: CollectionView, with size: CGSize) {
     collectionView.frame.size = size
+
     prepareItems()
 
     collectionView.backgroundColors = [NSColor.clear]
@@ -366,7 +368,6 @@ public class Spot: NSObject, Spotable {
 
     headerHeight = configureHeaderFooterComponentKey(.header, with: size)
     footerHeight = configureHeaderFooterComponentKey(.footer, with: size)
-    scrollView.frame.size = size
 
     switch componentKind {
     case .carousel:
@@ -395,6 +396,7 @@ public class Spot: NSObject, Spotable {
   }
 
   fileprivate func layoutTableView(_ tableView: TableView, with size: CGSize) {
+    tableView.frame.origin.y = headerHeight
     tableView.sizeToFit()
     scrollView.frame.size.width = size.width
     scrollView.frame.size.height = tableView.frame.height + headerHeight + footerHeight
@@ -426,13 +428,16 @@ public class Spot: NSObject, Spotable {
       }).first?.size.height
 
       var collectionViewContentSize = collectionViewContentSize
+      collectionView.frame.origin.y = headerHeight
       collectionView.frame.size.width = collectionViewContentSize.width
       collectionView.frame.size.height = newCollectionViewHeight
-      collectionView.frame.origin.y = headerHeight
+
       documentView.frame.size = collectionView.frame.size
-      documentView.frame.size.height = collectionView.frame.size.height
+      documentView.frame.size.height = collectionView.frame.size.height + headerHeight + footerHeight
+
       scrollView.frame.size.width = size.width
-      scrollView.frame.size.height = documentView.frame.size.height + headerHeight
+      scrollView.frame.size.height = documentView.frame.size.height
+      scrollView.scrollerInsets.bottom = headerHeight
     }
   }
 
@@ -448,8 +453,11 @@ public class Spot: NSObject, Spotable {
     if let collectionViewContentSize = collectionView.collectionViewLayout?.collectionViewContentSize {
       var collectionViewContentSize = collectionViewContentSize
       collectionViewContentSize.height += headerHeight + footerHeight
-      collectionView.frame.size = collectionViewContentSize
+      collectionView.frame.size.height = collectionViewContentSize.height
+      collectionView.frame.size.width = collectionViewContentSize.width
+      
       documentView.frame.size = collectionViewContentSize
+
       scrollView.frame.size.height = collectionView.frame.height
     }
   }
@@ -494,7 +502,7 @@ public class Spot: NSObject, Spotable {
       let leftLayout = CollectionViewLeftLayout()
       layout = leftLayout
     default:
-      let flowLayout = NSCollectionViewFlowLayout()
+      let flowLayout = GridableLayout()
       flowLayout.scrollDirection = .vertical
       layout = flowLayout
     }
