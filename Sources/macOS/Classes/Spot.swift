@@ -131,28 +131,6 @@ public class Spot: NSObject, Spotable {
     }
   }
 
-//  open var layout: NSCollectionViewLayout
-
-  open lazy var titleView: NSTextField = {
-    let titleView = NSTextField()
-    titleView.isEditable = false
-    titleView.isSelectable = false
-    titleView.isBezeled = false
-    titleView.textColor = NSColor.gray
-    titleView.drawsBackground = false
-
-    return titleView
-  }()
-
-  lazy var lineView: NSView = {
-    let lineView = NSView()
-    lineView.frame.size.height = 1
-    lineView.wantsLayer = true
-    lineView.layer?.backgroundColor = NSColor.gray.withAlphaComponent(0.2).cgColor
-
-    return lineView
-  }()
-
   open lazy var scrollView: ScrollView = ScrollView()
 
   public var view: ScrollView {
