@@ -17,15 +17,6 @@ public class Spot: NSObject, Spotable {
   }
 
   public struct Key {
-    public static let titleSeparator = "title-separator"
-    public static let titleFontSize = "title-font-size"
-    public static let titleTopInset = "title-top-inset"
-    public static let titleBottomInset = "title-bottom-inset"
-    public static let titleLeftInset = "title-left-inset"
-    public static let contentInsetsTop = "inset-top"
-    public static let contentInsetsLeft = "inset-left"
-    public static let contentInsetsBottom = "inset-bottom"
-    public static let contentInsetsRight = "inset-right"
     public static let doubleAction = "double-click"
 
     /// The key for minimum interitem spacing
@@ -53,16 +44,6 @@ public class Spot: NSObject, Spotable {
       /// Default minimum line spacing
       public static var minimumLineSpacing: CGFloat = 0.0
     }
-
-    public static var titleSeparator: Bool = true
-    public static var titleFontSize: CGFloat = 18.0
-    public static var titleLeftInset: CGFloat = 0.0
-    public static var titleTopInset: CGFloat = 10.0
-    public static var titleBottomInset: CGFloat = 10.0
-    public static var contentInsetsTop: CGFloat = 0.0
-    public static var contentInsetsLeft: CGFloat = 0.0
-    public static var contentInsetsBottom: CGFloat = 0.0
-    public static var contentInsetsRight: CGFloat = 0.0
 
     public static var defaultLayout: String = LayoutType.flow.rawValue
     /// Default grid layout maximum item width
