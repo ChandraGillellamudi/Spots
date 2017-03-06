@@ -274,14 +274,6 @@ open class Controller: NSViewController, SpotsProtocol {
     spots.forEach { layoutSpot($0) }
   }
 
-  fileprivate func delayedLayout() {
-    layoutInProcess = true
-    spots.forEach {
-      layoutSpot($0)
-    }
-    layoutInProcess = false
-  }
-
   fileprivate func layoutSpot(_ spot: Spotable) {
     switch spot {
     case let spot as Spot:
