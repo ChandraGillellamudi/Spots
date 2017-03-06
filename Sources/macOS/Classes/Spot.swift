@@ -265,6 +265,25 @@ public class Spot: NSObject, Spotable {
     view.layoutSubviews()
   }
 
+  fileprivate func setupHeader(kind: String) {
+    guard !component.header.isEmpty, headerView == nil else {
+      return
+    }
+
+    if let (_, headerView) = Configuration.views.make(component.header) {
+      if let headerView = headerView,
+        let componentable = headerView as? Componentable {
+        let size = CGSize(width: view.frame.width,
+                          height: componentable.preferredHeaderHeight)
+        componentable.configure(component)
+        headerView.frame.size = size
+        self.headerView = headerView
+//        tableView?.addSubview(headerView)
+//        collectionView?.addSubview(headerView)
+      }
+    }
+  }
+
   fileprivate func setupTableView(_ tableView: TableView, with size: CGSize) {
     scrollView.contentView.addSubview(tableView)
 
