@@ -262,6 +262,8 @@ public class Spot: NSObject, Spotable {
       layoutCollectionView(collectionView, with: size)
     }
 
+    headerView?.frame.size.width = size.width
+
     view.layoutSubviews()
   }
 
