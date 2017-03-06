@@ -237,6 +237,8 @@ public class Spot: NSObject, Spotable {
   public func setup(_ size: CGSize) {
     type(of: self).configure?(view)
 
+    setupHeader(kind: component.header)
+
     if let layout = component.layout {
       scrollView.contentInsets.top = CGFloat(layout.inset.top)
       scrollView.contentInsets.left = CGFloat(layout.inset.left)
