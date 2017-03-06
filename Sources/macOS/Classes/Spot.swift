@@ -74,6 +74,9 @@ public class Spot: NSObject, Spotable {
   weak public var focusDelegate: SpotsFocusDelegate?
   weak public var delegate: SpotsDelegate?
 
+  var headerView: View?
+  var footerView: View?
+
   var headerHeight = CGFloat(0.0)
   var footerHeight = CGFloat(0.0)
 
