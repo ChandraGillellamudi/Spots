@@ -258,6 +258,13 @@ public class Spot: NSObject, Spotable {
     footerView?.frame.size.width = size.width
     footerView?.frame.origin.y = scrollView.frame.height - footerHeight
 
+    if let layout = component.layout {
+      headerView?.frame.origin.x = CGFloat(layout.inset.left)
+      footerView?.frame.origin.x = CGFloat(layout.inset.left)
+      headerView?.frame.size.width -= CGFloat(layout.inset.left + layout.inset.right)
+      footerView?.frame.size.width -= CGFloat(layout.inset.left + layout.inset.right)
+    }
+
     view.layoutSubviews()
   }
 
