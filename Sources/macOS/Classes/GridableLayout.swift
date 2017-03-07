@@ -36,11 +36,18 @@ public class GridableLayout: FlowLayout {
   }
 
   public override func shouldInvalidateLayout(forBoundsChange newBounds: NSRect) -> Bool {
-    guard let collectionView = collectionView else {
-      return false
+    guard let collectionView = collectionView,
+      let delegate = collectionView.delegate as? Delegate,
+      let spot = delegate.spot else {
+        return false
     }
 
-    let shouldInvalidateLayout = newBounds.size.height != collectionView.frame.height + collectionView.frame.origin.y * 2
+    var offset: CGFloat = 0.0
+    if let spot = spot as? Spot {
+      offset += spot.headerHeight + spot.footerHeight
+    }
+
+    let shouldInvalidateLayout = newBounds.size.height != collectionView.frame.height + offset
 
     return shouldInvalidateLayout
   }
