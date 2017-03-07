@@ -309,13 +309,6 @@ public class Spot: NSObject, Spotable {
   }
 
   fileprivate func setupTableView(_ tableView: TableView, with size: CGSize) {
-    if let layout = component.layout {
-      scrollView.contentInsets.top = CGFloat(layout.inset.top)
-      scrollView.contentInsets.left = CGFloat(layout.inset.left)
-      scrollView.contentInsets.bottom = CGFloat(layout.inset.bottom)
-      scrollView.contentInsets.right = CGFloat(layout.inset.right)
-    }
-
     scrollView.addSubview(tableView)
 
     component.items.enumerated().forEach {
