@@ -432,7 +432,6 @@ public class Spot: NSObject, Spotable {
 
       if let layout = component.layout {
         collectionViewContentSize.width += CGFloat(layout.inset.left)
-        collectionViewContentSize.width += CGFloat(layout.inset.right)
       }
 
       collectionView.frame.origin.y = headerHeight
@@ -440,6 +439,11 @@ public class Spot: NSObject, Spotable {
       collectionView.frame.size.height = newCollectionViewHeight
 
       documentView.frame.size = collectionView.frame.size
+
+      if let layout = component.layout {
+        documentView.frame.size.width += CGFloat(layout.inset.right)
+      }
+
       documentView.frame.size.height = collectionView.frame.size.height + headerHeight + footerHeight
 
       scrollView.frame.size.width = size.width
