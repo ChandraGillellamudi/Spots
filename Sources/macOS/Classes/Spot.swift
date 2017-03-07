@@ -233,6 +233,8 @@ public class Spot: NSObject, Spotable {
   public func setup(_ size: CGSize) {
     type(of: self).configure?(view)
 
+    scrollView.frame.size = size
+
     setupHeader(kind: component.header)
     setupFooter(kind: component.footer)
 
