@@ -336,6 +336,10 @@ public class Spot: NSObject, Spotable {
     tableView.doubleAction = #selector(self.doubleAction(_:))
     tableView.sizeToFit()
 
+    guard tableView.tableColumns.isEmpty else {
+      return
+    }
+
     let column = NSTableColumn(identifier: "tableview-column")
     column.maxWidth = 250
     column.width = 250
