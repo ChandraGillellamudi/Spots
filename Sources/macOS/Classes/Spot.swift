@@ -174,11 +174,6 @@ public class Spot: NSObject, Spotable {
 
     userInterface.register()
 
-    if let componentLayout = self.component.layout,
-      let collectionViewLayout = collectionView?.collectionViewLayout as? FlowLayout {
-      componentLayout.configure(collectionViewLayout: collectionViewLayout)
-    }
-
     self.spotDataSource = DataSource(spot: self)
     self.spotDelegate = Delegate(spot: self)
   }
@@ -349,6 +344,12 @@ public class Spot: NSObject, Spotable {
   }
 
   fileprivate func setupCollectionView(_ collectionView: CollectionView, with size: CGSize) {
+
+    if let componentLayout = self.component.layout,
+      let collectionViewLayout = collectionView.collectionViewLayout as? FlowLayout {
+      componentLayout.configure(collectionViewLayout: collectionViewLayout)
+    }
+
     collectionView.frame.size = size
 
     prepareItems()
@@ -428,6 +429,12 @@ public class Spot: NSObject, Spotable {
       }).first?.size.height
 
       var collectionViewContentSize = collectionViewContentSize
+
+      if let layout = component.layout {
+        collectionViewContentSize.width += CGFloat(layout.inset.left)
+        collectionViewContentSize.width += CGFloat(layout.inset.right)
+      }
+
       collectionView.frame.origin.y = headerHeight
       collectionView.frame.size.width = collectionViewContentSize.width
       collectionView.frame.size.height = newCollectionViewHeight
@@ -437,7 +444,7 @@ public class Spot: NSObject, Spotable {
 
       scrollView.frame.size.width = size.width
       scrollView.frame.size.height = documentView.frame.size.height
-      scrollView.scrollerInsets.bottom = headerHeight
+      scrollView.scrollerInsets.bottom = footerHeight
     }
   }
 
