@@ -29,10 +29,6 @@ public class GridableLayout: FlowLayout {
       contentSize.width += minimumInteritemSpacing * CGFloat(spot.items.count - 1)
 
       contentSize.height = firstItem.size.height
-
-      if let componentLayout = spot.component.layout {
-        contentSize.height += CGFloat(componentLayout.inset.top + componentLayout.inset.bottom)
-      }
     case .vertical:
       contentSize.width = spot.view.frame.width
       contentSize.height = super.collectionViewContentSize.height
