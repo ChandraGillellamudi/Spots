@@ -281,7 +281,9 @@ open class Controller: NSViewController, SpotsProtocol {
         break
       }
 
-      spot.setup(spot.view.frame.size)
+      if spot.userInterface is CollectionView {
+        spot.setup(spot.view.frame.size)
+      }
     case let spot as Gridable:
       guard let layout = spot.component.layout, layout.span >= 1 else {
         break
