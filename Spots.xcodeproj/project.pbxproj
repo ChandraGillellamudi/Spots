@@ -42,6 +42,12 @@
 		BD31BB9D1EA6209C00D1FC8A /* DelegateConfigurationClosureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD31BB991EA6208600D1FC8A /* DelegateConfigurationClosureTests.swift */; };
 		BD31BB9E1EA6209D00D1FC8A /* DelegateConfigurationClosureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD31BB991EA6208600D1FC8A /* DelegateConfigurationClosureTests.swift */; };
 		BD31BB9F1EA6209E00D1FC8A /* DelegateConfigurationClosureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD31BB991EA6208600D1FC8A /* DelegateConfigurationClosureTests.swift */; };
+		BD327F841EDFF8F2008DFD18 /* SizeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD327F821EDFF8AC008DFD18 /* SizeCache.swift */; };
+		BD327F851EDFF8F3008DFD18 /* SizeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD327F821EDFF8AC008DFD18 /* SizeCache.swift */; };
+		BD327F861EDFF8F3008DFD18 /* SizeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD327F821EDFF8AC008DFD18 /* SizeCache.swift */; };
+		BD327F881EDFF933008DFD18 /* SizeCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD327F871EDFF933008DFD18 /* SizeCacheTests.swift */; };
+		BD327F891EDFF933008DFD18 /* SizeCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD327F871EDFF933008DFD18 /* SizeCacheTests.swift */; };
+		BD327F8A1EDFF933008DFD18 /* SizeCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD327F871EDFF933008DFD18 /* SizeCacheTests.swift */; };
 		BD4295551D81D39700E07E1C /* TestComponentiOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4295541D81D39700E07E1C /* TestComponentiOS.swift */; };
 		BD42CA851E4C9B2600A86E3B /* ComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD42CA841E4C9B2600A86E3B /* ComponentTests.swift */; };
 		BD42CA861E4C9B2600A86E3B /* ComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD42CA841E4C9B2600A86E3B /* ComponentTests.swift */; };
@@ -414,6 +420,8 @@
 		BD24030B1E4B981A005BAA19 /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		BD2403101E4B9A02005BAA19 /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		BD31BB991EA6208600D1FC8A /* DelegateConfigurationClosureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelegateConfigurationClosureTests.swift; sourceTree = "<group>"; };
+		BD327F821EDFF8AC008DFD18 /* SizeCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SizeCache.swift; sourceTree = "<group>"; };
+		BD327F871EDFF933008DFD18 /* SizeCacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SizeCacheTests.swift; sourceTree = "<group>"; };
 		BD4295541D81D39700E07E1C /* TestComponentiOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestComponentiOS.swift; sourceTree = "<group>"; };
 		BD42CA841E4C9B2600A86E3B /* ComponentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComponentTests.swift; sourceTree = "<group>"; };
 		BD44D1E21EADC48200F7205E /* HeaderMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderMode.swift; sourceTree = "<group>"; };
@@ -529,7 +537,7 @@
 		BDB8D5921E4DFADC00220BC3 /* TestItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestItem.swift; sourceTree = "<group>"; };
 		BDB8D5991E51C4FE00220BC3 /* Delegate+iOS+UIScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Delegate+iOS+UIScrollView.swift"; sourceTree = "<group>"; };
 		BDCA3CF21E8295EB00A98A76 /* TestUserInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUserInterface.swift; sourceTree = "<group>"; };
-		BDCFCD401DCA7EFF0047E84C /* TestSpotsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSpotsController.swift; sourceTree = "<group>"; };
+		BDCFCD401DCA7EFF0047E84C /* TestSpotsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TestSpotsController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		BDD63FAB1D941A80008E885A /* Tailor.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Tailor.framework; path = Carthage/Build/tvOS/Tailor.framework; sourceTree = "<group>"; };
 		BDDCF6D51E4DF911004B38C4 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		BDDCF6DA1E4DF91F004B38C4 /* Indexable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Indexable.swift; sourceTree = "<group>"; };
@@ -795,6 +803,7 @@
 				BD798EF31EA28F200069EFB7 /* SpotsControllerManager.swift */,
 				BD99824B1EA93684000A6FD4 /* ViewPreparer.swift */,
 				BDA3D96B1EC6F1A400141227 /* ItemManager.swift */,
+				BD327F821EDFF8AC008DFD18 /* SizeCache.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1052,6 +1061,7 @@
 				BDCA3CF21E8295EB00A98A76 /* TestUserInterface.swift */,
 				BD10D5211D79533C00DF8E9B /* TestViewModelExtensions.swift */,
 				BDA5EEBE1EDD77DD00B18214 /* ComponentFlowLayoutSharedTests.swift */,
+				BD327F871EDFF933008DFD18 /* SizeCacheTests.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -1551,6 +1561,7 @@
 				D5D2826D1E547219004BF251 /* ViewStateDelegate.swift in Sources */,
 				D5D282691E54710D004BF251 /* ViewState.swift in Sources */,
 				BDAD85CB1E3E7032008289AE /* UserInterface.swift in Sources */,
+				BD327F861EDFF8F3008DFD18 /* SizeCache.swift in Sources */,
 				BDDCF6F11E4DF93D004B38C4 /* DictionaryConvertible.swift in Sources */,
 				BDAD84E11E3E701C008289AE /* UITableView+UserInterface.swift in Sources */,
 				BDAD85711E3E7032008289AE /* Animation.swift in Sources */,
@@ -1597,6 +1608,7 @@
 				BD5FE3451EA6222C0008749C /* TestComponentDelegate+iOS.swift in Sources */,
 				BD42CA861E4C9B2600A86E3B /* ComponentTests.swift in Sources */,
 				BDB8D5951E4DFADC00220BC3 /* TestItem.swift in Sources */,
+				BD327F8A1EDFF933008DFD18 /* SizeCacheTests.swift in Sources */,
 				BDEA32811E87A6FF0044B056 /* TestInteraction.swift in Sources */,
 				D5D282741E547742004BF251 /* TestListWrapper.swift in Sources */,
 				BD21C2551E4358CE00FE2B26 /* ComponentFlowLayoutTests.swift in Sources */,
@@ -1684,6 +1696,7 @@
 				BD1F9E0F1EA39DFD009C018B /* SpotsController+iOS+Extensions.swift in Sources */,
 				BDAD84E21E3E701C008289AE /* UIViewController+Extensions.swift in Sources */,
 				BDAD85631E3E7032008289AE /* DataSource.swift in Sources */,
+				BD327F841EDFF8F2008DFD18 /* SizeCache.swift in Sources */,
 				BDAD84B61E3E701C008289AE /* GridWrapper.swift in Sources */,
 				BD1F9E191EA39F2E009C018B /* Dictionary+Extensions.swift in Sources */,
 				BDA3D96C1EC6F1A400141227 /* ItemManager.swift in Sources */,
@@ -1747,6 +1760,7 @@
 				BD5FE3461EA6222D0008749C /* TestComponentDelegate+iOS.swift in Sources */,
 				BD677E8D1DC62575006D1654 /* TestUIViewControllerExtensions.swift in Sources */,
 				BD42CA851E4C9B2600A86E3B /* ComponentTests.swift in Sources */,
+				BD327F881EDFF933008DFD18 /* SizeCacheTests.swift in Sources */,
 				BD798EF81EA2A1320069EFB7 /* TestSpotsControllerManager.swift in Sources */,
 				BD650CF61ECAC2C100DFD220 /* ItemConfigurableComputeSizeTests.swift in Sources */,
 				D5D282731E54773C004BF251 /* TestListWrapper.swift in Sources */,
@@ -1827,6 +1841,7 @@
 				BDAD851E1E3E7025008289AE /* Delegate+macOS+Extensions.swift in Sources */,
 				BD9ECEBA1E6EC6D1003E4388 /* Component+macOS+Grid.swift in Sources */,
 				BDAD85941E3E7032008289AE /* ComponentDelegate+Extensions.swift in Sources */,
+				BD327F851EDFF8F3008DFD18 /* SizeCache.swift in Sources */,
 				BD99824D1EA93684000A6FD4 /* ViewPreparer.swift in Sources */,
 				BDAD85761E3E7032008289AE /* RegistryType.swift in Sources */,
 				BD77D1F91E8538080075A3FC /* ComponentKind.swift in Sources */,
@@ -1857,6 +1872,7 @@
 				BDCA3CF41E8295EB00A98A76 /* TestUserInterface.swift in Sources */,
 				BD6CB2661ED77F8200FC78C8 /* SpotsScrollViewTests.swift in Sources */,
 				BD650CF71ECAC2C100DFD220 /* ItemConfigurableComputeSizeTests.swift in Sources */,
+				BD327F891EDFF933008DFD18 /* SizeCacheTests.swift in Sources */,
 				BD10D5261D7955AC00DF8E9B /* TestViewModelExtensions.swift in Sources */,
 				BDA5EEC11EDD78BE00B18214 /* ComponentFlowLayoutSharedTests.swift in Sources */,
 				BDEA32801E87A6FF0044B056 /* TestInteraction.swift in Sources */,

@@ -34,7 +34,7 @@ class DataSourceTests: XCTestCase {
 
     /// Check that preferred view size is applied if height is 0.0
     component.model.items[0].kind = "custom"
-    component.model.items[0].size.height = 0.0
+    component.sizeCache.updateOrCreate(.height, value: 0.0, for: 0)
     itemCell1 = component.componentDataSource!.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0)) as? ListWrapper
 
     guard let itemConfigurable = itemCell1?.wrappedView as? CustomListCell else {
@@ -43,7 +43,7 @@ class DataSourceTests: XCTestCase {
     }
 
     XCTAssertNotNil(itemConfigurable)
-    XCTAssertEqual(component.model.items[0].size.height, 44)
+    XCTAssertEqual(component.sizeCache.size(at: 0).height, 44)
   }
 
   func testDataSourceForGridableObject() {
@@ -77,11 +77,11 @@ class DataSourceTests: XCTestCase {
 
     /// Check that preferred view size is applied if height is 0.0
     component.model.items[0].kind = "custom"
-    component.model.items[0].size.height = 0.0
+    component.sizeCache.updateOrCreate(.height, value: 0.0, for: 0)
     itemCell1 = dataSource.collectionView(collectionView, cellForItemAt: IndexPath(item: 0, section: 0)) as? GridWrapper
     let itemConfigurable = itemCell1?.wrappedView as! CustomGridCell
     XCTAssertNotNil(itemConfigurable)
-    XCTAssertEqual(component.model.items[0].size.height, 44)
+    XCTAssertEqual(component.sizeCache.size(at: 0).height, 44)
   }
 
   func testDataSourceForGridableCustomHeader() {

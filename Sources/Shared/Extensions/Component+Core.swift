@@ -25,8 +25,8 @@ public extension Component {
         let superViewHeight = self.view.superview?.frame.size.height ?? UIScreen.main.bounds.height
       #endif
 
-      for item in model.items {
-        height += item.size.height
+      for size in sizeCache.sizes {
+        height += size.height
 
         #if !os(OSX)
           /// tvOS adds spacing between cells (it seems to be locked to 14 pixels in height).
@@ -61,8 +61,8 @@ public extension Component {
         if let collectionViewLayout = collectionView.collectionViewLayout as? FlowLayout {
           switch collectionViewLayout.scrollDirection {
           case .horizontal:
-            if let firstItem = item(at: 0), firstItem.size.height > collectionViewLayout.collectionViewContentSize.height {
-              height = firstItem.size.height + collectionViewLayout.sectionInset.top + collectionViewLayout.sectionInset.bottom
+            if sizeCache.size(at: 0).height > collectionViewLayout.collectionViewContentSize.height {
+              height = sizeCache.size(at: 0).height + collectionViewLayout.sectionInset.top + collectionViewLayout.sectionInset.bottom
             } else {
               height = collectionViewLayout.collectionViewContentSize.height
             }
@@ -222,9 +222,9 @@ public extension Component {
 
     let offset: CGFloat
     if model.interaction.scrollDirection == .horizontal {
-      offset = model.items[0..<item.index].reduce(0, { $0 + $1.size.width })
+      offset = sizeCache.sizes[0..<item.index].reduce(0, { $0 + $1.width })
     } else {
-      offset = model.items[0..<item.index].reduce(0, { $0 + $1.size.height })
+      offset = sizeCache.sizes[0..<item.index].reduce(0, { $0 + $1.height })
     }
 
     return offset

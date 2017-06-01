@@ -15,20 +15,20 @@ public class ItemManager {
     var preparedItems = items
     var spanWidth: CGFloat?
 
-    if let layout = component.model.layout, layout.span > 0.0 {
+    if component.model.kind == .list {
+      spanWidth = component.view.frame.width
+    } else if let layout = component.model.layout, layout.span > 0.0 {
       let componentWidth: CGFloat = component.view.frame.size.width - CGFloat(layout.inset.left + layout.inset.right)
       spanWidth = (componentWidth / CGFloat(layout.span)) - CGFloat(layout.itemSpacing)
     }
 
     preparedItems.enumerated().forEach { (index: Int, item: Item) in
-      var item = item
-      if let spanWidth = spanWidth {
-        item.size.width = spanWidth
+      if let _ = configure(component: component, item: item, at: index, usesViewSize: true, recreateComposites: recreateComposites) {
+        preparedItems[index].index = index
       }
 
-      if let configuredItem = configure(component: component, item: item, at: index, usesViewSize: true, recreateComposites: recreateComposites) {
-        preparedItems[index].index = index
-        preparedItems[index] = configuredItem
+      if let spanWidth = spanWidth {
+        component.sizeCache.updateOrCreate(.width, value: spanWidth, for: index)
       }
     }
 
@@ -45,7 +45,7 @@ public class ItemManager {
     component.model.items[index] = configuredItem
   }
 
-  func configure(component: Component, item: Item, at index: Int, usesViewSize: Bool = false, recreateComposites: Bool) -> Item? {
+  @discardableResult func configure(component: Component, item: Item, at index: Int, usesViewSize: Bool = false, recreateComposites: Bool) -> Item? {
     var item = item
     item.index = index
 
@@ -70,7 +70,7 @@ public class ItemManager {
         prepare(component: component, item: item, view: view)
       }
 
-      prepare(component: component, kind: kind, view: view as Any, item: &item, recreateComposites: recreateComposites)
+      prepare(component: component, kind: kind, view: view as Any, item: item, recreateComposites: recreateComposites)
     #else
       if fullWidth == 0.0 {
         fullWidth = component.view.superview?.frame.size.width ?? component.view.frame.size.width
@@ -97,13 +97,14 @@ public class ItemManager {
     return item
   }
 
-  func prepare(component: Component, kind: String, view: Any, item: inout Item, recreateComposites: Bool) {
+  func prepare(component: Component, kind: String, view: Any, item: Item, recreateComposites: Bool) {
     if let view = view as? Wrappable, kind.contains(CompositeComponent.identifier) {
-      prepare(component: component, wrappable: view, item: &item, recreateComposites: recreateComposites)
+      prepare(component: component, wrappable: view, item: item, recreateComposites: recreateComposites)
     } else if let view = view as? ItemConfigurable {
       view.configure(with: item)
-      item.size.height = view.computeSize(for: item).height
-      setFallbackViewSize(component: component, item: &item, with: view)
+      let size = view.computeSize(for: item)
+      component.sizeCache.add(size, for: item.index)
+      setFallbackViewSize(component: component, item: item, with: view)
     }
   }
 
@@ -116,7 +117,9 @@ public class ItemManager {
     component.view.frame.size.width = view.frame.size.width
 
     if let itemConfigurable = view as? ItemConfigurable, view.frame.size.height == 0.0 {
-      view.frame.size.height = itemConfigurable.computeSize(for: item).height
+      let size = itemConfigurable.computeSize(for: item)
+      view.frame.size.height = size.height
+      component.sizeCache.updateOrCreate(.height, value: size.height, for: item.index)
     }
 
     if view.frame.size.width == 0.0 {
@@ -134,7 +137,7 @@ public class ItemManager {
   /// - parameter usesViewSize:      A boolean value to determine if the view uses the views height
   ///
   /// - returns: The height for the item based of the composable components
-  func prepare(component: Component, wrappable: Wrappable, item: inout Item, recreateComposites: Bool) {
+  func prepare(component: Component, wrappable: Wrappable, item: Item, recreateComposites: Bool) {
     var height: CGFloat = 0.0
 
     if recreateComposites {
@@ -175,7 +178,7 @@ public class ItemManager {
       }
     }
 
-    item.size.height = height
+    component.sizeCache.updateOrCreate(.height, value: height, for: item.index)
   }
 
   /// Set fallback size to view
@@ -183,23 +186,31 @@ public class ItemManager {
   /// - Parameters:
   ///   - item: The item struct that is being configured.
   ///   - view: The view used for fallback size for the item.
-  private func setFallbackViewSize(component: Component, item: inout Item, with view: ItemConfigurable) {
+  private func setFallbackViewSize(component: Component, item: Item, with view: ItemConfigurable) {
+    let hasExplicitWidth: Bool = item.size.width == 0.0
     let hasExplicitHeight: Bool = item.size.height == 0.0
 
-    if hasExplicitHeight {
-      item.size.height = view.computeSize(for: item).height
+    if !hasExplicitWidth && !hasExplicitHeight {
+      component.sizeCache.add(item.size, for: item.index)
+      return
     }
 
-    if item.size.width == 0.0 {
-      item.size.width  = view.computeSize(for: item).width
+    let size = view.computeSize(for: item)
+
+    if !hasExplicitHeight {
+      component.sizeCache.updateOrCreate(.height, value: size.height, for: item.index)
     }
 
-    if let superview = component.view.superview, item.size.width == 0.0 {
-      item.size.width = superview.frame.width
+    if !hasExplicitWidth {
+      component.sizeCache.updateOrCreate(.width, value: size.width, for: item.index)
     }
 
-    if let view = view as? View, item.size.width == 0.0 || item.size.width > view.bounds.width {
-      item.size.width = view.bounds.width
+    if let superview = component.view.superview, component.sizeCache.size(at: item.index).width == 0.0 {
+      component.sizeCache.updateOrCreate(.width, value: superview.frame.width, for: item.index)
+    }
+
+    if let view = view as? View, component.sizeCache.size(at: item.index).width == 0.0 || item.size.width > view.bounds.width {
+      component.sizeCache.updateOrCreate(.width, value: view.bounds.width, for: item.index)
     }
   }
 }

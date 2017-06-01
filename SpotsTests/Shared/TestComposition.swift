@@ -390,7 +390,7 @@ class CompositionTests: XCTestCase {
       XCTAssertTrue(components[0].compositeComponents[1].component.userInterface is TableView)
       XCTAssertEqual(components[0].compositeComponents[1].component.model.items.count, 10)
       XCTAssertEqual(components[0].compositeComponents[1].component.view.frame.size.height,
-                     components[0].model.items[1].size.height)
+                     components[0].sizeCache.size(at: 1).height)
 
       XCTAssertNotNil(composite)
       XCTAssertNotNil(itemConfigurable)
@@ -399,7 +399,7 @@ class CompositionTests: XCTestCase {
       XCTAssertTrue(components[1].compositeComponents[0].component.userInterface is TableView)
       XCTAssertEqual(components[1].compositeComponents[0].component.model.items.count, 10)
       XCTAssertEqual(components[1].compositeComponents[0].component.view.frame.size.height,
-                     components[1].model.items[0].size.height)
+                     components[1].sizeCache.size(at: 0).height)
 
       itemConfigurable = components[0].compositeComponents[1].component.ui(at: 0)
 
@@ -409,7 +409,7 @@ class CompositionTests: XCTestCase {
       XCTAssertTrue(components[1].compositeComponents[1].component.userInterface is TableView)
       XCTAssertEqual(components[1].compositeComponents[1].component.model.items.count, 10)
       XCTAssertEqual(components[1].compositeComponents[1].component.view.frame.size.height,
-                     components[1].model.items[1].size.height)
+                     components[1].sizeCache.size(at: 1).height)
 
       XCTAssertEqual(reloadTimes, 1)
 

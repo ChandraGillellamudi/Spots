@@ -18,7 +18,7 @@ extension DataSource: UICollectionViewDataSource {
       var additionalIndexes: Int = 0
       var remainingWidth: CGFloat = 0
       for item in component.model.items {
-        remainingWidth += item.size.width
+        remainingWidth += component.sizeCache.size(at: item.index).width
 
         if remainingWidth >= collectionView.frame.size.width {
           break

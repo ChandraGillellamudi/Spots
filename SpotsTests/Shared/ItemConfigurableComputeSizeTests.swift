@@ -1,5 +1,5 @@
 import XCTest
-import Spots
+@testable import Spots
 
 #if os(macOS)
   typealias ListView = NSTableRowView
@@ -55,24 +55,24 @@ class ItemConfigurableComputeSizeTests: XCTestCase {
 
   func testWrappedDynamicViewInGrid() {
     let component = createComponent(kind: .grid, items: [Item(kind: Identifier.wrapped.identifier)])
-    XCTAssertEqual(component.model.items[0].size, CGSize(width: 200, height: 200))
+    XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 200, height: 200))
   }
 
   func testWrappedDynamicViewInList() {
     let component = createComponent(kind: .list, items: [Item(kind: Identifier.wrapped.identifier)])
-    XCTAssertEqual(component.model.items[0].size, CGSize(width: 200, height: 200))
+    XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 200, height: 200))
   }
 
   func testDynamicListView() {
     let component = createComponent(kind: .list, items: [Item(kind: Identifier.list.identifier)])
-    XCTAssertEqual(component.model.items[0].size, CGSize(width: 200, height: 300))
+    XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 200, height: 300))
 
     let type: ListViewMock? = component.ui(at: 0)
     XCTAssertNotNil(type)
     let expectation = self.expectation(description: "Wait for component update")
     component.update(Item(kind: Identifier.wrapped.identifier), index: 0) {
       XCTAssertEqual(component.model.items[0].kind, Identifier.wrapped.identifier)
-      XCTAssertEqual(component.model.items[0].size, CGSize(width: 200, height: 200))
+      XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 200, height: 200))
       let type: WrappedViewMock? = component.ui(at: 0)
       XCTAssertNotNil(type)
       expectation.fulfill()
@@ -83,12 +83,12 @@ class ItemConfigurableComputeSizeTests: XCTestCase {
 
   func testDynamicGridView() {
     let component = createComponent(kind: .grid, items: [Item(kind: Identifier.grid.identifier)])
-    XCTAssertEqual(component.model.items[0].size, CGSize(width: 150, height: 150))
+    XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 150, height: 150))
 
     let expectation = self.expectation(description: "Wait for component update")
     component.update(Item(kind: Identifier.wrapped.identifier), index: 0) {
       XCTAssertEqual(component.model.items[0].kind, Identifier.wrapped.identifier)
-      XCTAssertEqual(component.model.items[0].size, CGSize(width: 200, height: 200))
+      XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 200, height: 200))
       let type: WrappedViewMock? = component.ui(at: 0)
       XCTAssertNotNil(type)
       expectation.fulfill()

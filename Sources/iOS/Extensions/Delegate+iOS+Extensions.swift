@@ -10,7 +10,9 @@ extension Delegate: UICollectionViewDelegate {
   ///
   /// - returns: The width and height of the specified item. Both values must be greater than 0.
   @objc(collectionView:layout:sizeForItemAtIndexPath:) public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    guard let component = component else { return CGSize.zero }
+    guard let component = component else {
+      return CGSize.zero
+    }
 
     return component.sizeForItem(at: indexPath)
   }
@@ -199,7 +201,7 @@ extension Delegate: UITableViewDelegate {
       width: tableView.frame.size.width,
       height: tableView.frame.size.height)
 
-    return component.item(at: indexPath)?.size.height ?? 0
+    return component.sizeCache.size(at: indexPath).height
   }
 }
 

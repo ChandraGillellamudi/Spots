@@ -22,9 +22,7 @@ extension Component {
       height = computedHeight
       tableView.frame.size.height = height
     } else {
-      for item in model.items {
-        height += item.size.height
-      }
+      height += sizeCache.totalHeight()
     }
 
     height += headerHeight

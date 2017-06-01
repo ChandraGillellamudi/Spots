@@ -91,6 +91,8 @@ public class Component: NSObject, ComponentHorizontallyScrollable {
     return userInterface as? CollectionView
   }
 
+  public var sizeCache = SizeCache()
+
   /// Default initializer for creating a component.
   ///
   /// - Parameters:
@@ -303,10 +305,7 @@ public class Component: NSObject, ComponentHorizontallyScrollable {
   /// - Parameter indexPath: The index path of the item that should be resolved.
   /// - Returns: A `CGSize` based of the `Item`'s width and height.
   public func sizeForItem(at indexPath: IndexPath) -> CGSize {
-    return CGSize(
-      width:  item(at: indexPath)?.size.width  ?? 0.0,
-      height: item(at: indexPath)?.size.height ?? 0.0
-    )
+    return sizeCache.size(at: indexPath)
   }
 
   /// Scroll to a specific item based on predicate.

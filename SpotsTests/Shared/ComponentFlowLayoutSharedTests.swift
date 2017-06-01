@@ -24,16 +24,16 @@ class ComponentFlowLayoutSharedTests: XCTestCase {
     let (component, flowLayout) = createComponent(with: layout)
     let layoutAttributes = flowLayout.sharedLayoutAttributesForElements(in: component.view.frame)
 
-    XCTAssertEqual(component.model.items[0].size, CGSize(width: 50, height: 50))
-    XCTAssertEqual(component.model.items[1].size, CGSize(width: 50, height: 50))
-    XCTAssertEqual(component.model.items[2].size, CGSize(width: 50, height: 50))
-    XCTAssertEqual(component.model.items[3].size, CGSize(width: 50, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 50, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 1), CGSize(width: 50, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 2), CGSize(width: 50, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 3), CGSize(width: 50, height: 50))
 
     // Check that the layout attributes correspond to the model sizes
-    XCTAssertEqual(component.model.items[0].size, layoutAttributes[0].size)
-    XCTAssertEqual(component.model.items[1].size, layoutAttributes[1].size)
-    XCTAssertEqual(component.model.items[2].size, layoutAttributes[2].size)
-    XCTAssertEqual(component.model.items[3].size, layoutAttributes[3].size)
+    XCTAssertEqual(component.sizeCache.size(at: 0), layoutAttributes[0].size)
+    XCTAssertEqual(component.sizeCache.size(at: 1), layoutAttributes[1].size)
+    XCTAssertEqual(component.sizeCache.size(at: 2), layoutAttributes[2].size)
+    XCTAssertEqual(component.sizeCache.size(at: 3), layoutAttributes[3].size)
 
     // Check that the x coordinate is correct based on padding and item spacing
     XCTAssertEqual(layoutAttributes[0].frame.origin.x, 0)
@@ -50,16 +50,16 @@ class ComponentFlowLayoutSharedTests: XCTestCase {
     let (component, flowLayout) = createComponent(with: layout)
     let layoutAttributes = flowLayout.sharedLayoutAttributesForElements(in: component.view.frame)
 
-    XCTAssertEqual(component.model.items[0].size, CGSize(width: 100, height: 50))
-    XCTAssertEqual(component.model.items[1].size, CGSize(width: 100, height: 50))
-    XCTAssertEqual(component.model.items[2].size, CGSize(width: 100, height: 50))
-    XCTAssertEqual(component.model.items[3].size, CGSize(width: 100, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 100, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 1), CGSize(width: 100, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 2), CGSize(width: 100, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 3), CGSize(width: 100, height: 50))
 
     // Check that the layout attributes correspond to the model sizes
-    XCTAssertEqual(component.model.items[0].size, layoutAttributes[0].size)
-    XCTAssertEqual(component.model.items[1].size, layoutAttributes[1].size)
-    XCTAssertEqual(component.model.items[2].size, layoutAttributes[2].size)
-    XCTAssertEqual(component.model.items[3].size, layoutAttributes[3].size)
+    XCTAssertEqual(component.sizeCache.size(at: 0), layoutAttributes[0].size)
+    XCTAssertEqual(component.sizeCache.size(at: 1), layoutAttributes[1].size)
+    XCTAssertEqual(component.sizeCache.size(at: 2), layoutAttributes[2].size)
+    XCTAssertEqual(component.sizeCache.size(at: 3), layoutAttributes[3].size)
 
     // Check that the x coordinate is correct based on padding and item spacing
     XCTAssertEqual(layoutAttributes[0].frame.origin.x, 0)
@@ -76,16 +76,16 @@ class ComponentFlowLayoutSharedTests: XCTestCase {
     let (component, flowLayout) = createComponent(with: layout)
     let layoutAttributes = flowLayout.sharedLayoutAttributesForElements(in: component.view.frame)
 
-    XCTAssertEqual(component.model.items[0].size, CGSize(width: 50, height: 50))
-    XCTAssertEqual(component.model.items[1].size, CGSize(width: 50, height: 50))
-    XCTAssertEqual(component.model.items[2].size, CGSize(width: 50, height: 50))
-    XCTAssertEqual(component.model.items[3].size, CGSize(width: 50, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 50, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 1), CGSize(width: 50, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 2), CGSize(width: 50, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 3), CGSize(width: 50, height: 50))
 
     // Check that the layout attributes correspond to the model sizes
-    XCTAssertEqual(component.model.items[0].size, layoutAttributes[0].size)
-    XCTAssertEqual(component.model.items[1].size, layoutAttributes[1].size)
-    XCTAssertEqual(component.model.items[2].size, layoutAttributes[2].size)
-    XCTAssertEqual(component.model.items[3].size, layoutAttributes[3].size)
+    XCTAssertEqual(component.sizeCache.size(at: 0), layoutAttributes[0].size)
+    XCTAssertEqual(component.sizeCache.size(at: 1), layoutAttributes[1].size)
+    XCTAssertEqual(component.sizeCache.size(at: 2), layoutAttributes[2].size)
+    XCTAssertEqual(component.sizeCache.size(at: 3), layoutAttributes[3].size)
 
     // Check that the x coordinate is correct based on padding and item spacing
     XCTAssertEqual(layoutAttributes[0].frame.origin.x, 0)
@@ -105,16 +105,16 @@ class ComponentFlowLayoutSharedTests: XCTestCase {
     let layoutAttributes = flowLayout.sharedLayoutAttributesForElements(in: component.view.frame)
 
     // The width should be 80 because the component size is 100 and it has 10 in padding on each side.
-    XCTAssertEqual(component.model.items[0].size, CGSize(width: 80, height: 50))
-    XCTAssertEqual(component.model.items[1].size, CGSize(width: 80, height: 50))
-    XCTAssertEqual(component.model.items[2].size, CGSize(width: 80, height: 50))
-    XCTAssertEqual(component.model.items[3].size, CGSize(width: 80, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 80, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 1), CGSize(width: 80, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 2), CGSize(width: 80, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 3), CGSize(width: 80, height: 50))
 
     // Check that the layout attributes correspond to the model sizes
-    XCTAssertEqual(component.model.items[0].size, layoutAttributes[0].size)
-    XCTAssertEqual(component.model.items[1].size, layoutAttributes[1].size)
-    XCTAssertEqual(component.model.items[2].size, layoutAttributes[2].size)
-    XCTAssertEqual(component.model.items[3].size, layoutAttributes[3].size)
+    XCTAssertEqual(component.sizeCache.size(at: 0), layoutAttributes[0].size)
+    XCTAssertEqual(component.sizeCache.size(at: 1), layoutAttributes[1].size)
+    XCTAssertEqual(component.sizeCache.size(at: 2), layoutAttributes[2].size)
+    XCTAssertEqual(component.sizeCache.size(at: 3), layoutAttributes[3].size)
 
     // Check that the x coordinate is correct based on padding and item spacing
     XCTAssertEqual(layoutAttributes[0].frame.origin.x, 10)
@@ -139,16 +139,16 @@ class ComponentFlowLayoutSharedTests: XCTestCase {
 
     // The width should be the width of the component (100) divided by 2, then minus the padding which
     // is 10 on each side. We also have an item spacing of 10.
-    XCTAssertEqual(component.model.items[0].size, CGSize(width: 30, height: 50))
-    XCTAssertEqual(component.model.items[1].size, CGSize(width: 30, height: 50))
-    XCTAssertEqual(component.model.items[2].size, CGSize(width: 30, height: 50))
-    XCTAssertEqual(component.model.items[3].size, CGSize(width: 30, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 30, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 1), CGSize(width: 30, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 2), CGSize(width: 30, height: 50))
+    XCTAssertEqual(component.sizeCache.size(at: 3), CGSize(width: 30, height: 50))
 
     // Check that the layout attributes correspond to the model sizes
-    XCTAssertEqual(component.model.items[0].size, layoutAttributes[0].size)
-    XCTAssertEqual(component.model.items[1].size, layoutAttributes[1].size)
-    XCTAssertEqual(component.model.items[2].size, layoutAttributes[2].size)
-    XCTAssertEqual(component.model.items[3].size, layoutAttributes[3].size)
+    XCTAssertEqual(component.sizeCache.size(at: 0), layoutAttributes[0].size)
+    XCTAssertEqual(component.sizeCache.size(at: 1), layoutAttributes[1].size)
+    XCTAssertEqual(component.sizeCache.size(at: 2), layoutAttributes[2].size)
+    XCTAssertEqual(component.sizeCache.size(at: 3), layoutAttributes[3].size)
 
     // Check that the x coordinate is correct based on padding and item spacing
     XCTAssertEqual(layoutAttributes[0].frame.origin.x, 10)

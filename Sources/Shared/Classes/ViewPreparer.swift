@@ -66,8 +66,10 @@ class ViewPreparer {
   func prepareItemConfigurableView(_ view: ItemConfigurable, atIndex index: Int, in component: Component, configureView: Bool = false) {
     view.configure(with: component.model.items[index])
 
-    if component.model.items[index].size.height == 0.0 {
-      component.model.items[index].size = view.computeSize(for: component.model.items[index])
+    if component.sizeCache.size(at: index).height == 0.0 {
+      let size = view.computeSize(for: component.model.items[index])
+      component.sizeCache.add(size, for: index)
+      component.model.items[index].size = size
     }
 
     if configureView {

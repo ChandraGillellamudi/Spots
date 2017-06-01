@@ -22,7 +22,7 @@ class TestSpot: XCTestCase {
 
     XCTAssertNotNil(component.view)
     XCTAssertNotNil(component.tableView)
-    XCTAssertEqual(component.model.items[0].size, CGSize(width: 100, height: 88))
+    XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 100, height: 88))
     XCTAssertEqual(component.model.items[1].size, CGSize(width: 100, height: 88))
     XCTAssertEqual(component.view.frame.size, CGSize(width: 100, height: 180))
     let expectedContentSizeHeight: CGFloat = 180

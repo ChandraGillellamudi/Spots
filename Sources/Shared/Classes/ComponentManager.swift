@@ -238,16 +238,20 @@ public class ComponentManager {
         self?.finishComponentOperation(component, updateHeightAndIndexes: false, completion: completion)
         return
       } else {
+        let oldSize = component.sizeCache.size(at: index)
         self?.itemManager.configureItem(at: index, component: component, usesViewSize: true)
+        let newSize = component.sizeCache.size(at: index)
         let newItem = component.model.items[index]
 
         if newItem.kind != oldItem.kind {
           component.userInterface?.reload([index], withAnimation: animation, completion: nil)
-        } else if newItem.size.height != oldItem.size.height {
+        } else if newSize.height != oldSize.height {
           if let view: ItemConfigurable = component.userInterface?.view(at: index), animation != .none {
             component.userInterface?.beginUpdates()
             view.configure(with: component.model.items[index])
-            component.model.items[index].size.height = view.computeSize(for: component.model.items[index]).height
+            let size = view.computeSize(for: component.model.items[index])
+            component.model.items[index].size.height = size.height
+            component.sizeCache.updateOrCreate(.height, value: size.height, for: index)
             component.userInterface?.endUpdates()
           } else {
             component.userInterface?.reload([index], withAnimation: animation, completion: nil)
@@ -256,7 +260,9 @@ public class ComponentManager {
           updateHeightAndIndexes = true
         } else if let view: ItemConfigurable = component.userInterface?.view(at: index) {
           view.configure(with: component.model.items[index])
-          component.model.items[index].size.height = view.computeSize(for: component.model.items[index]).height
+          let size = view.computeSize(for: component.model.items[index])
+          component.sizeCache.updateOrCreate(.height, value: size.height, for: index)
+          component.model.items[index].size.height = size.height
         }
 
         self?.finishComponentOperation(component, updateHeightAndIndexes: updateHeightAndIndexes, completion: completion)

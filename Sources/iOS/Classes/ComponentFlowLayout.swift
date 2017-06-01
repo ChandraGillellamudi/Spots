@@ -54,22 +54,22 @@ open class ComponentFlowLayout: UICollectionViewFlowLayout {
     case .horizontal:
       contentSize = .zero
 
-      if let firstItem = component.model.items.first {
-        contentSize.height = (firstItem.size.height + minimumLineSpacing) * CGFloat(layout.itemsPerRow)
+      let firstItem = component.sizeCache.size(at: 0)
 
-        if component.model.items.count % layout.itemsPerRow == 1 {
-          contentSize.width += firstItem.size.width + minimumLineSpacing
-        }
+      contentSize.height = (firstItem.height + minimumLineSpacing) * CGFloat(layout.itemsPerRow)
+
+      if component.model.items.count % layout.itemsPerRow == 1 {
+        contentSize.width += firstItem.width + minimumLineSpacing
       }
 
       contentSize.height -= minimumLineSpacing
 
-      for (index, item) in component.model.items.enumerated() {
+      for (index, size) in component.sizeCache.sizes.enumerated() {
         guard indexEligibleForItemsPerRow(index: index, itemsPerRow: layout.itemsPerRow) else {
           continue
         }
 
-        contentSize.width += item.size.width + minimumInteritemSpacing
+        contentSize.width += size.width + minimumInteritemSpacing
       }
 
       if layout.infiniteScrolling {

@@ -103,7 +103,7 @@ class ComponentTestsOniOS: XCTestCase {
     XCTAssertEqual(component.model.items[0].title, "foo")
     XCTAssertEqual(component.model.items[1].title, "bar")
     XCTAssertEqual(component.model.items[2].title, "baz")
-    XCTAssertEqual(component.model.items.first?.size.width, 100)
+    XCTAssertEqual(component.model.items.first?.size.width, 120)
     XCTAssertEqual(component.model.items.first?.size.height, 180)
     XCTAssertEqual(component.view.frame.size.height, 180)
 
@@ -153,14 +153,14 @@ class ComponentTestsOniOS: XCTestCase {
     XCTAssertEqual(component.model.items[1].title, "bar")
     XCTAssertEqual(component.model.items[2].title, "baz")
     XCTAssertEqual(component.model.items[3].title, "bazar")
-    XCTAssertEqual(component.model.items[0].size.width, width)
-    XCTAssertEqual(component.model.items[0].size.height, 88)
-    XCTAssertEqual(component.model.items[1].size.width, width)
-    XCTAssertEqual(component.model.items[1].size.height, 88)
-    XCTAssertEqual(component.model.items[2].size.width, width)
-    XCTAssertEqual(component.model.items[2].size.height, 88)
-    XCTAssertEqual(component.model.items[3].size.width, width)
-    XCTAssertEqual(component.model.items[3].size.height, 88)
+    XCTAssertEqual(component.sizeCache.size(at: 0).width, width)
+    XCTAssertEqual(component.sizeCache.size(at: 0).height, 88)
+    XCTAssertEqual(component.sizeCache.size(at: 1).width, width)
+    XCTAssertEqual(component.sizeCache.size(at: 1).height, 88)
+    XCTAssertEqual(component.sizeCache.size(at: 2).width, width)
+    XCTAssertEqual(component.sizeCache.size(at: 2).height, 88)
+    XCTAssertEqual(component.sizeCache.size(at: 3).width, width)
+    XCTAssertEqual(component.sizeCache.size(at: 3).height, 88)
 
     // Assert that height has been added for the page indicator
     XCTAssertEqual(component.view.frame.size.height, 110)
@@ -205,10 +205,10 @@ class ComponentTestsOniOS: XCTestCase {
     XCTAssertEqual(model.layout!.pageIndicatorPlacement, .overlay)
 
     // Assert item layout (derived from preferred view size)
-    XCTAssertEqual(component.model.items[0].size.height, 88)
-    XCTAssertEqual(component.model.items[1].size.height, 88)
-    XCTAssertEqual(component.model.items[2].size.height, 88)
-    XCTAssertEqual(component.model.items[3].size.height, 88)
+    XCTAssertEqual(component.sizeCache.size(at: 0).height, 88)
+    XCTAssertEqual(component.sizeCache.size(at: 1).height, 88)
+    XCTAssertEqual(component.sizeCache.size(at: 2).height, 88)
+    XCTAssertEqual(component.sizeCache.size(at: 3).height, 88)
 
     // Assert that no height has been added for a page indicator
     XCTAssertEqual(component.view.frame.height, 88)
@@ -281,7 +281,7 @@ class ComponentTestsOniOS: XCTestCase {
     component.view.layoutSubviews()
 
     // Make sure our mocked item size is correct
-    XCTAssertEqual(collectionView.itemSize, component.model.items[0].size)
+    XCTAssertEqual(collectionView.itemSize, component.sizeCache.size(at: 0))
 
     // When scrolling, make sure the closest item is centered
     var originalPoint = CGPoint(x: 350, y: 0)

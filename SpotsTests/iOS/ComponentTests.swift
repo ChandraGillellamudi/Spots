@@ -22,8 +22,8 @@ class ComponentTests: XCTestCase {
 
     XCTAssertTrue(component.view is TableView)
     XCTAssertTrue(component.view.isEqual(component.tableView))
-    XCTAssertEqual(component.model.items[0].size, CGSize(width: 100, height: 44))
-    XCTAssertEqual(component.model.items[1].size, CGSize(width: 100, height: 44))
+    XCTAssertEqual(component.sizeCache.size(at: 0), CGSize(width: 100, height: 44))
+    XCTAssertEqual(component.sizeCache.size(at: 1), CGSize(width: 100, height: 44))
     XCTAssertEqual(component.view.frame.size, CGSize(width: 100, height: 100))
 
     /// tvOS adds 14 pixels to each item in a table view.
