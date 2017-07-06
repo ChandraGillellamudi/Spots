@@ -98,6 +98,12 @@
 		BD798EF81EA2A1320069EFB7 /* TestSpotsControllerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD798EF71EA2A1320069EFB7 /* TestSpotsControllerManager.swift */; };
 		BD798EF91EA2A1320069EFB7 /* TestSpotsControllerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD798EF71EA2A1320069EFB7 /* TestSpotsControllerManager.swift */; };
 		BD798EFA1EA2A1320069EFB7 /* TestSpotsControllerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD798EF71EA2A1320069EFB7 /* TestSpotsControllerManager.swift */; };
+		BD8032BD1F0D266A0065FE94 /* ComponentStateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8032BC1F0D26640065FE94 /* ComponentStateDelegate.swift */; };
+		BD8032BE1F0D266B0065FE94 /* ComponentStateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8032BC1F0D26640065FE94 /* ComponentStateDelegate.swift */; };
+		BD8032BF1F0D266C0065FE94 /* ComponentStateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8032BC1F0D26640065FE94 /* ComponentStateDelegate.swift */; };
+		BD8032C11F0D26890065FE94 /* ComponentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8032C01F0D26890065FE94 /* ComponentState.swift */; };
+		BD8032C21F0D26890065FE94 /* ComponentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8032C01F0D26890065FE94 /* ComponentState.swift */; };
+		BD8032C31F0D26890065FE94 /* ComponentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8032C01F0D26890065FE94 /* ComponentState.swift */; };
 		BD99824C1EA93684000A6FD4 /* ViewPreparer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD99824B1EA93684000A6FD4 /* ViewPreparer.swift */; };
 		BD99824D1EA93684000A6FD4 /* ViewPreparer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD99824B1EA93684000A6FD4 /* ViewPreparer.swift */; };
 		BD99824E1EA93684000A6FD4 /* ViewPreparer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD99824B1EA93684000A6FD4 /* ViewPreparer.swift */; };
@@ -453,6 +459,8 @@
 		BD77D1FB1E85382D0075A3FC /* ComponentModel+Equatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ComponentModel+Equatable.swift"; sourceTree = "<group>"; };
 		BD798EF31EA28F200069EFB7 /* SpotsControllerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotsControllerManager.swift; sourceTree = "<group>"; };
 		BD798EF71EA2A1320069EFB7 /* TestSpotsControllerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSpotsControllerManager.swift; sourceTree = "<group>"; };
+		BD8032BC1F0D26640065FE94 /* ComponentStateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentStateDelegate.swift; sourceTree = "<group>"; };
+		BD8032C01F0D26890065FE94 /* ComponentState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentState.swift; sourceTree = "<group>"; };
 		BD99824B1EA93684000A6FD4 /* ViewPreparer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewPreparer.swift; sourceTree = "<group>"; };
 		BD9ECEB41E6EC6A7003E4388 /* Component+macOS+List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Component+macOS+List.swift"; sourceTree = "<group>"; };
 		BD9ECEB61E6EC6B4003E4388 /* Component+macOS+Carousel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Component+macOS+Carousel.swift"; sourceTree = "<group>"; };
@@ -829,6 +837,7 @@
 				BDAD85331E3E7032008289AE /* RegistryType.swift */,
 				D5D282661E54710D004BF251 /* ViewState.swift */,
 				BD44D1E21EADC48200F7205E /* HeaderMode.swift */,
+				BD8032C01F0D26890065FE94 /* ComponentState.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -860,6 +869,7 @@
 		BDAD85441E3E7032008289AE /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				BD8032BC1F0D26640065FE94 /* ComponentStateDelegate.swift */,
 				BDAD85451E3E7032008289AE /* CarouselScrollDelegate.swift */,
 				D5D2826E1E5474E0004BF251 /* Cell.swift */,
 				BDAD854E1E3E7032008289AE /* ComponentDelegate.swift */,
@@ -1584,11 +1594,13 @@
 				BD9ECEBF1E6EC8A5003E4388 /* Component+iOS+Carousel.swift in Sources */,
 				BD1F9E131EA39ED9009C018B /* Mappable+Extensions.swift in Sources */,
 				BDAD85A41E3E7032008289AE /* Wrappable+Extensions.swift in Sources */,
+				BD8032C31F0D26890065FE94 /* ComponentState.swift in Sources */,
 				BDAD84DF1E3E701C008289AE /* UICollectionView+UserInterface.swift in Sources */,
 				BD1F9E171EA39F02009C018B /* Array+Extensions.swift in Sources */,
 				BDAD85B61E3E7032008289AE /* RefreshDelegate.swift in Sources */,
 				BDB1F8B01E5D91BE0064F64B /* ComponentHorizontallyScrollable.swift in Sources */,
 				BDAD85A71E3E7032008289AE /* CarouselScrollDelegate.swift in Sources */,
+				BD8032BF1F0D266C0065FE94 /* ComponentStateDelegate.swift in Sources */,
 				BDAD857D1E3E7032008289AE /* Component+Extensions.swift in Sources */,
 				BDAD85621E3E7032008289AE /* CompositeComponent.swift in Sources */,
 				BDAD857A1E3E7032008289AE /* CarouselScrollDelegate+Extensions.swift in Sources */,
@@ -1668,6 +1680,7 @@
 				BDAD85751E3E7032008289AE /* RegistryType.swift in Sources */,
 				BD77D1F41E8537E80075A3FC /* ComponentModelDiff.swift in Sources */,
 				BDAD84BE1E3E701C008289AE /* DefaultItemView.swift in Sources */,
+				BD8032C11F0D26890065FE94 /* ComponentState.swift in Sources */,
 				BD1F9E111EA39ED9009C018B /* Mappable+Extensions.swift in Sources */,
 				BDAD85ED1E3E7032008289AE /* StateCache.swift in Sources */,
 				BDB8D59A1E51C4FE00220BC3 /* Delegate+iOS+UIScrollView.swift in Sources */,
@@ -1730,6 +1743,7 @@
 				BD9ECEBE1E6EC8A5003E4388 /* Component+iOS+Carousel.swift in Sources */,
 				BDE44B0F1EA0E5E80021EAC8 /* ComponentManager.swift in Sources */,
 				BDAD85C91E3E7032008289AE /* UserInterface.swift in Sources */,
+				BD8032BD1F0D266A0065FE94 /* ComponentStateDelegate.swift in Sources */,
 				BDAD84AA1E3E701C008289AE /* SpotsController.swift in Sources */,
 				BDAD85CF1E3E7032008289AE /* Wrappable.swift in Sources */,
 				BDAD84B01E3E701C008289AE /* GridHeaderFooterWrapper.swift in Sources */,
@@ -1826,6 +1840,7 @@
 				BDAD85641E3E7032008289AE /* DataSource.swift in Sources */,
 				BDAD85881E3E7032008289AE /* ScrollDelegate+Extensions.swift in Sources */,
 				BD2403111E4B9A02005BAA19 /* Component.swift in Sources */,
+				BD8032C21F0D26890065FE94 /* ComponentState.swift in Sources */,
 				BD77D1FD1E85382D0075A3FC /* ComponentModel+Equatable.swift in Sources */,
 				BDAD85EE1E3E7032008289AE /* StateCache.swift in Sources */,
 				BDAD85821E3E7032008289AE /* Item+Extensions.swift in Sources */,
@@ -1852,6 +1867,7 @@
 				BD9ECEBA1E6EC6D1003E4388 /* Component+macOS+Grid.swift in Sources */,
 				BDAD85941E3E7032008289AE /* ComponentDelegate+Extensions.swift in Sources */,
 				BD99824D1EA93684000A6FD4 /* ViewPreparer.swift in Sources */,
+				BD8032BE1F0D266B0065FE94 /* ComponentStateDelegate.swift in Sources */,
 				BDAD85761E3E7032008289AE /* RegistryType.swift in Sources */,
 				BD77D1F91E8538080075A3FC /* ComponentKind.swift in Sources */,
 				BDAD850C1E3E7025008289AE /* SpotsController.swift in Sources */,

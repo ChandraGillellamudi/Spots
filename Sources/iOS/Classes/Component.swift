@@ -30,6 +30,17 @@ public class Component: NSObject, ComponentHorizontallyScrollable {
   public var model: ComponentModel
   /// An engine that handles mutation of the component model data source.
   public var manager: ComponentManager = ComponentManager()
+
+  public var state: ComponentState = .initializing {
+    willSet {
+      guard state != newValue else {
+        return
+      }
+      stateDelegate?.handleState(for: self, from: state, to: newValue)
+    }
+  }
+  public var stateDelegate: ComponentStateDelegate?
+
   /// A collection of composite components, dynamically constructed and mutated based of
   /// the contents of the `.model`.
   public var compositeComponents: [CompositeComponent] = []
@@ -145,6 +156,7 @@ public class Component: NSObject, ComponentHorizontallyScrollable {
   ///
   /// - Parameter size: A `CGSize` that is used to set the frame of the user interface.
   public func setup(with size: CGSize) {
+    state = .setup
     view.frame.size = size
 
     setupFooter(with: &model)
@@ -323,6 +335,10 @@ public class Component: NSObject, ComponentHorizontallyScrollable {
     } else if let tableView = tableView {
       tableView.scrollToRow(at: .init(row: index, section: 0), at: .middle, animated: animated)
     }
+  }
+
+  public func beforeUpdate() {
+    state = .updating
   }
 
   /// This method is invoked after mutations has been performed on a component.

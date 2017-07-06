@@ -25,6 +25,7 @@ public class ComponentManager {
   /// - parameter completion: A completion closure that is executed in the main queue.
   public func append(item: Item, component: Component, withAnimation animation: Animation = .automatic, completion: Completion) {
     Dispatch.main { [weak self] in
+      component.beforeUpdate()
       let numberOfItems = component.model.items.count
       component.model.items.append(item)
       self?.itemManager.configureItem(at: numberOfItems, component: component, usesViewSize: true)
@@ -48,6 +49,7 @@ public class ComponentManager {
   /// - parameter completion: A completion closure that is executed in the main queue.
   public func append(items: [Item], component: Component, withAnimation animation: Animation = .automatic, completion: Completion = nil) {
     Dispatch.main { [weak self] in
+      component.beforeUpdate()
       var indexes = [Int]()
       let numberOfItems = component.model.items.count
 
@@ -78,6 +80,7 @@ public class ComponentManager {
   /// - parameter completion: A completion closure that is executed in the main queue.
   public func prepend(items: [Item], component: Component, withAnimation animation: Animation = .automatic, completion: Completion = nil) {
     Dispatch.main { [weak self] in
+      component.beforeUpdate()
       let numberOfItems = component.model.items.count
       var indexes = [Int]()
 
@@ -110,6 +113,7 @@ public class ComponentManager {
   /// - parameter completion: A completion closure that is executed in the main queue.
   public func insert(item: Item, atIndex index: Int, component: Component, withAnimation animation: Animation = .automatic, completion: Completion = nil) {
     Dispatch.main { [weak self] in
+      component.beforeUpdate()
       let numberOfItems = component.model.items.count
       var indexes = [Int]()
 
@@ -145,6 +149,7 @@ public class ComponentManager {
         return
       }
 
+      component.beforeUpdate()
       component.model.items.remove(at: index)
       component.userInterface?.delete([index], withAnimation: animation) { [weak self] in
         self?.finishComponentOperation(component, updateHeightAndIndexes: true, completion: completion)
@@ -160,6 +165,7 @@ public class ComponentManager {
   /// - parameter completion: A completion closure that is executed in the main queue.
   public func delete(items: [Item], component: Component, withAnimation animation: Animation = .automatic, completion: Completion = nil) {
     Dispatch.main {
+      component.beforeUpdate()
       var indexPaths = [Int]()
       var indexes = [Int]()
 
@@ -186,6 +192,7 @@ public class ComponentManager {
   /// - parameter completion: A completion closure that is executed in the main queue when the view model has been removed.
   public func delete(atIndex index: Int, component: Component, withAnimation animation: Animation = .automatic, completion: Completion = nil) {
     Dispatch.main {
+      component.beforeUpdate()
       component.model.items.remove(at: index)
       component.userInterface?.delete([index], withAnimation: animation) { [weak self] in
         self?.finishComponentOperation(component, updateHeightAndIndexes: true, completion: completion)
@@ -201,6 +208,7 @@ public class ComponentManager {
   /// - parameter completion: A completion closure that is executed in the main queue when the view model has been removed.
   public func delete(atIndexes indexes: [Int], component: Component, withAnimation animation: Animation = .automatic, completion: Completion = nil) {
     Dispatch.main {
+      component.beforeUpdate()
       indexes.sorted(by: { $0 > $1 }).forEach {
         component.model.items.remove(at: $0)
       }
@@ -225,6 +233,7 @@ public class ComponentManager {
         return
       }
 
+      component.beforeUpdate()
       var item = item
       item.index = index
       var updateHeightAndIndexes: Bool = false
@@ -273,6 +282,7 @@ public class ComponentManager {
   /// - parameter completion: A completion closure that is performed when all mutations are performed
   public func reload(indexes: [Int]? = nil, component: Component, withAnimation animation: Animation = .automatic, completion: Completion = nil) {
     Dispatch.main {
+      component.beforeUpdate()
       component.refreshIndexes()
       Dispatch.main { [weak self] in
         if let indexes = indexes {
@@ -355,6 +365,7 @@ public class ComponentManager {
           return
         }
 
+        component.beforeUpdate()
         var indexes: [Int]? = nil
         let oldItems = component.model.items
         component.model.items = items
@@ -396,6 +407,7 @@ public class ComponentManager {
         return
       }
 
+      component.beforeUpdate()
       component.model = newComponentModel
       component.reload(nil, withAnimation: animation) { [weak self] in
         self?.finishComponentOperation(component, updateHeightAndIndexes: false, completion: completion)
@@ -415,6 +427,7 @@ public class ComponentManager {
       return
     }
 
+    component.beforeUpdate()
     let lastUpdate = updates.last
     for index in updates {
       guard let item = component.item(at: index) else {

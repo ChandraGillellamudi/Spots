@@ -14,7 +14,10 @@ open class SpotsController: NSViewController, SpotsProtocol {
   /// A collection of components.
   open var components: [Component] {
     didSet {
-      components.forEach { $0.delegate = delegate }
+      components.forEach {
+        $0.delegate = delegate
+        $0.stateDelegate = stateDelegate
+      }
       delegate?.componentsDidChange(components)
     }
   }
@@ -46,6 +49,14 @@ open class SpotsController: NSViewController, SpotsProtocol {
         $0.delegate = delegate
       }
       delegate?.componentsDidChange(components)
+    }
+  }
+
+  weak public var stateDelegate: ComponentStateDelegate? {
+    didSet {
+      components.forEach {
+        $0.stateDelegate = stateDelegate
+      }
     }
   }
 
@@ -106,6 +117,7 @@ open class SpotsController: NSViewController, SpotsProtocol {
     NotificationCenter.default.removeObserver(self)
     components.forEach { component in
       component.delegate = nil
+      component.stateDelegate = nil
     }
     delegate = nil
     scrollDelegate = nil
