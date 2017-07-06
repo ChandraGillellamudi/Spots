@@ -184,7 +184,7 @@ open class SpotsController: NSViewController, SpotsProtocol {
     super.viewWillAppear()
 
     setupComponents()
-    scrollView.layoutViews()
+    scrollView.layoutViews(animated: false)
   }
 
   open override func viewDidAppear() {

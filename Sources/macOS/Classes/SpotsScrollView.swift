@@ -158,13 +158,15 @@ open class SpotsScrollView: NSScrollView {
           if newHeight >= frame.size.height {
             frame.size.height = newHeight
           }
-        }
 
-        let shouldAnimate = isAnimationsEnabled && window?.inLiveResize == false && animated
-        if shouldAnimate {
-          scrollView.animator().frame = frame
-        } else {
           scrollView.frame = frame
+        } else {
+          let shouldAnimate = isAnimationsEnabled && window?.inLiveResize == false && animated
+          if shouldAnimate {
+            scrollView.animator().frame = frame
+          } else {
+            scrollView.frame = frame
+          }
         }
 
         scrollView.contentOffset = contentOffset
