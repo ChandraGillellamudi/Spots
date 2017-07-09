@@ -516,7 +516,16 @@ public class SpotsControllerManager {
       if performCleanup {
         controller.scrollView.contentOffset = previousContentOffset
       }
+
       completion?()
+
+      #if os(macOS)
+        if #available(OSX 10.12, *) {
+          // Workaround to fix the contentInset when using tabs.
+          controller.scrollView.frame.size.width -= 1
+          controller.scrollView.frame.size.width += 1
+        }
+      #endif
     }
   }
 
