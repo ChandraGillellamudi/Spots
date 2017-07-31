@@ -4,9 +4,15 @@ open class NoScrollView: NSScrollView {
 
   var scrollingEnabled: Bool = true
 
+  open override var verticalScroller: NSScroller? {
+    get {
+      return nil
+    }
+    set {}
+  }
+
   override init(frame frameRect: NSRect) {
     super.init(frame: frameRect)
-
     drawsBackground = false
     hasHorizontalScroller = false
     hasVerticalScroller = false
