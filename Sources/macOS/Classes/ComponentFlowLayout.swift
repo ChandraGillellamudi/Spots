@@ -320,7 +320,11 @@ public class ComponentFlowLayout: FlowLayout {
     let offset: CGFloat = component.headerHeight + component.footerHeight
     let shouldInvalidateLayout = newBounds.size.height != collectionView.frame.height + offset
 
-    return shouldInvalidateLayout
+    if collectionView.window?.inLiveResize == true {
+      return false
+    }
+
+    return true
   }
 
   /// Check if the current index is eligible for performing itemsPerRow calculations.
