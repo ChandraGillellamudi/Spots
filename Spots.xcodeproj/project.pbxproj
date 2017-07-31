@@ -104,6 +104,7 @@
 		BD8032C11F0D26890065FE94 /* ComponentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8032C01F0D26890065FE94 /* ComponentState.swift */; };
 		BD8032C21F0D26890065FE94 /* ComponentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8032C01F0D26890065FE94 /* ComponentState.swift */; };
 		BD8032C31F0D26890065FE94 /* ComponentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8032C01F0D26890065FE94 /* ComponentState.swift */; };
+		BD9150901F2CA59100D19D57 /* NSCollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD91508F1F2CA59100D19D57 /* NSCollectionView+Extensions.swift */; };
 		BD99824C1EA93684000A6FD4 /* ViewPreparer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD99824B1EA93684000A6FD4 /* ViewPreparer.swift */; };
 		BD99824D1EA93684000A6FD4 /* ViewPreparer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD99824B1EA93684000A6FD4 /* ViewPreparer.swift */; };
 		BD99824E1EA93684000A6FD4 /* ViewPreparer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD99824B1EA93684000A6FD4 /* ViewPreparer.swift */; };
@@ -461,6 +462,7 @@
 		BD798EF71EA2A1320069EFB7 /* TestSpotsControllerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSpotsControllerManager.swift; sourceTree = "<group>"; };
 		BD8032BC1F0D26640065FE94 /* ComponentStateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentStateDelegate.swift; sourceTree = "<group>"; };
 		BD8032C01F0D26890065FE94 /* ComponentState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentState.swift; sourceTree = "<group>"; };
+		BD91508F1F2CA59100D19D57 /* NSCollectionView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSCollectionView+Extensions.swift"; sourceTree = "<group>"; };
 		BD99824B1EA93684000A6FD4 /* ViewPreparer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewPreparer.swift; sourceTree = "<group>"; };
 		BD9ECEB41E6EC6A7003E4388 /* Component+macOS+List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Component+macOS+List.swift"; sourceTree = "<group>"; };
 		BD9ECEB61E6EC6B4003E4388 /* Component+macOS+Carousel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Component+macOS+Carousel.swift"; sourceTree = "<group>"; };
@@ -786,6 +788,7 @@
 				BD9ECEBB1E6EC82D003E4388 /* Component+macOS+HeaderFooter.swift */,
 				BD9ECEB41E6EC6A7003E4388 /* Component+macOS+List.swift */,
 				BDA25E8F1EB5070F002B21C0 /* Wrappable+macOS.swift */,
+				BD91508F1F2CA59100D19D57 /* NSCollectionView+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1840,6 +1843,7 @@
 				BDAD85641E3E7032008289AE /* DataSource.swift in Sources */,
 				BDAD85881E3E7032008289AE /* ScrollDelegate+Extensions.swift in Sources */,
 				BD2403111E4B9A02005BAA19 /* Component.swift in Sources */,
+				BD9150901F2CA59100D19D57 /* NSCollectionView+Extensions.swift in Sources */,
 				BD8032C21F0D26890065FE94 /* ComponentState.swift in Sources */,
 				BD77D1FD1E85382D0075A3FC /* ComponentModel+Equatable.swift in Sources */,
 				BDAD85EE1E3E7032008289AE /* StateCache.swift in Sources */,

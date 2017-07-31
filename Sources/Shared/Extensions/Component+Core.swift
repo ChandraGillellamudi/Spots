@@ -58,7 +58,7 @@ public extension Component {
           height += headerView?.frame.size.height ?? 0
           height += footerView?.frame.size.height ?? 0
       #else
-        if let collectionViewLayout = collectionView.collectionViewLayout as? FlowLayout {
+        if let collectionViewLayout = collectionView.flowLayout {
           switch collectionViewLayout.scrollDirection {
           case .horizontal:
             if let firstItem = item(at: 0), firstItem.size.height > collectionViewLayout.collectionViewContentSize.height {
