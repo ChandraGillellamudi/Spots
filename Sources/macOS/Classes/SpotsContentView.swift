@@ -69,8 +69,7 @@ open class SpotsContentView: NSView {
   ///                      Note: The closure will not execute if the `SpotsScrollView` cannot
   ///                      be resolved.
   private func resolveSpotsScrollView(_ closure: (SpotsScrollView) -> Void) {
-    guard let clipView = superview,
-      let spotsScrollView = clipView.superview as? SpotsScrollView else {
+    guard let spotsScrollView = enclosingScrollView as? SpotsScrollView else {
         return
     }
 
