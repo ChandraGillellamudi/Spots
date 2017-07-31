@@ -5,9 +5,7 @@ open class SpotsContentView: NSView {
   /// `Component` views that are ordered after the model indexes.
   var subviewsInLayoutOrder = [NSView]()
 
-  override open var isFlipped: Bool {
-    return true
-  }
+  override open var isFlipped: Bool { return true }
 
   /// Remove all stored subviews when the view is deallocated.
   deinit {

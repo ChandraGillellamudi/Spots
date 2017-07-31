@@ -1,6 +1,7 @@
 import Cocoa
 
 open class SpotsScrollView: NSScrollView {
+  override open var isFlipped: Bool { return true }
 
   /// When enabled, the last `Component` in the collection will be stretched to occupy the remaining space.
   /// This can be enabled globally by setting `Configuration.stretchLastComponent` to `true`.
