@@ -29,6 +29,8 @@ extension Delegate: NSCollectionViewDelegate {
   /// - parameter item: The item being added.
   /// - parameter indexPath: The index path of the item.
   public func collectionView(_ collectionView: NSCollectionView, willDisplay item: NSCollectionViewItem, forRepresentedObjectAt indexPath: IndexPath) {
+    let collectionViewItem = item
+
     guard
       let component = component,
       let view = (item as? Wrappable)?.wrappedView,
@@ -39,6 +41,11 @@ extension Delegate: NSCollectionViewDelegate {
 
     if let itemConfigurable = view as? ItemConfigurable {
       component.configure?(itemConfigurable)
+    }
+
+    let selectedIndexes: [Int] = collectionView.selectionIndexes.map { $0 }
+    if selectedIndexes.contains(indexPath.item) {
+      collectionViewItem.isSelected = true
     }
 
     component.delegate?.component(component, willDisplay: view, item: item)
