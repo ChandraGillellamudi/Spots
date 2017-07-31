@@ -25,4 +25,6 @@ public protocol ComponentDelegate: class {
   /// - parameter view: The UI element that did end display.
   /// - parameter item: The data for the view that is going to be displayed.
   func component(_ component: Component, didEndDisplaying view: ComponentView, item: Item)
+
+  func component(_ component: Component, didChangeSelection selectedIndexes: [Int])
 }
