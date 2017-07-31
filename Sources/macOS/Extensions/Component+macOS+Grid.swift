@@ -8,20 +8,18 @@ extension Component {
     }
 
     collectionView.frame.size.width = size.width
-    collectionView.frame.origin.y = headerHeight
+//    collectionView.frame.origin.y = headerHeight
     collectionViewLayout.prepare()
     collectionViewLayout.invalidateLayout()
 
-    if let collectionViewContentSize = collectionView.collectionViewLayout?.collectionViewContentSize {
-      var collectionViewContentSize = collectionViewContentSize
-      collectionViewContentSize.height += headerHeight + footerHeight
-      collectionViewContentSize.height += CGFloat(model.layout.inset.top + model.layout.inset.bottom)
-      collectionView.frame.size.height = collectionViewContentSize.height
+    if let window = collectionView.window {
+      var collectionViewContentSize = collectionViewLayout.collectionViewContentSize
       collectionView.frame.size.width = collectionViewContentSize.width
 
-      documentView.frame.size = collectionViewContentSize
-
-      scrollView.frame.size.height = collectionView.frame.height
+      if collectionViewContentSize.height <= window.frame.size.height {
+        collectionView.frame.size.height = collectionViewContentSize.height
+      }
+      scrollView.frame.size = collectionViewContentSize
     }
   }
 

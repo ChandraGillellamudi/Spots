@@ -1,5 +1,9 @@
 import Cocoa
 
+class TableHeaderView: NSTableHeaderView {
+  override var isFlipped: Bool { return true }
+}
+
 extension Component {
 
   func setupHeader(with model: inout ComponentModel) {
@@ -16,7 +20,16 @@ extension Component {
         headerView.frame.size = size
         model.header = header
         self.headerView = headerView
-        scrollView.addSubview(headerView)
+
+        if model.kind == .list {
+          let tableHeaderView = TableHeaderView()
+          tableHeaderView.wantsLayer = true
+          tableHeaderView.frame.size = headerView.frame.size
+          tableHeaderView.addSubview(headerView)
+          tableView?.headerView = tableHeaderView
+        } else if let collectionView = collectionView {
+//          scrollView.addSubview(headerView)
+        }
       }
     }
   }
@@ -41,6 +54,7 @@ extension Component {
   }
 
   func layoutHeaderFooterViews(_ size: CGSize) {
+    headerView?.frame.origin.y = 0.0
     headerView?.frame.size.width = size.width
     footerView?.frame.size.width = size.width
     footerView?.frame.origin.y = scrollView.frame.height - footerHeight

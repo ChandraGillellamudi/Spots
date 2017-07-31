@@ -84,6 +84,8 @@ open class SpotsController: NSViewController, SpotsProtocol {
 
     NotificationCenter.default.addObserver(self, selector: #selector(windowDidResize(_:)), name: NSNotification.Name.NSWindowDidResize, object: nil)
 
+    NotificationCenter.default.addObserver(self, selector: #selector(windowWillLiveResize(_:)), name: NSNotification.Name.NSWindowWillStartLiveResize, object: nil)
+
     NotificationCenter.default.addObserver(self, selector: #selector(windowDidEndLiveResize(_:)), name: NSNotification.Name.NSWindowDidEndLiveResize, object: nil)
   }
 
@@ -221,15 +223,15 @@ open class SpotsController: NSViewController, SpotsProtocol {
   }
 
   public func setupComponent(at index: Int, component: Component) {
-    if component.view.superview == nil {
-      scrollView.componentsView.addSubview(component.view)
-    }
-
     components[index].model.index = index
     component.setup(with: CGSize(width: view.frame.width, height: view.frame.size.height))
     component.model.size = CGSize(
       width: view.frame.width,
       height: ceil(component.view.frame.height))
+
+    if component.view.superview == nil {
+      scrollView.componentsView.addSubview(component.view)
+    }
   }
 
   public func deselectAllExcept(selectedComponent: Component) {
@@ -242,7 +244,13 @@ open class SpotsController: NSViewController, SpotsProtocol {
 
   open override func viewDidLayout() {
     super.viewDidLayout()
+    scrollView.layoutViews(animated: false)
+  }
 
+  open func windowWillLiveResize(_ notification: Notification) {
+    for component in components {
+      component.didResize(size: view.frame.size, type: .live)
+    }
     scrollView.layoutViews(animated: false)
   }
 
@@ -274,8 +282,13 @@ open class SpotsController: NSViewController, SpotsProtocol {
   }
 
   open func scrollViewDidScroll(_ notification: NSNotification) {
-    guard let scrollView = notification.object as? SpotsScrollView,
-      let delegate = scrollDelegate,
+    guard let scrollView = notification.object as? SpotsScrollView else {
+      return
+    }
+
+    scrollView.layoutViews(animated: false)
+
+    guard let delegate = scrollDelegate,
       let _ = NSApplication.shared().mainWindow
       else {
         return

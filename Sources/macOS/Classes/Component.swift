@@ -109,7 +109,14 @@ import Tailor
   }
   /// A scroll view container that is used to construct a unified scrolling experience
   /// when using multiple components inside of a controller.
-  open lazy var scrollView: ScrollView = ScrollView(documentView: self.documentView)
+  open lazy var scrollView: ScrollView = {
+    let scrollView = ScrollView()
+    scrollView.verticalScrollElasticity = .none
+    scrollView.hasVerticalScroller = false
+    scrollView.hasHorizontalScroller = false
+    scrollView.contentView.postsBoundsChangedNotifications = true
+    return scrollView
+  }()
   /// A normal view with a flipped coordinates system.
   open lazy var documentView: FlippedView = FlippedView()
   /// The height of the header view.
@@ -153,11 +160,9 @@ import Tailor
   public required init(model: ComponentModel, userInterface: UserInterface, parentComponent: Component? = nil) {
     self.model = model
     self.userInterface = userInterface
-
     super.init()
     registerDefaultIfNeeded(view: DefaultItemView.self)
     userInterface.register()
-
     self.componentDataSource = DataSource(component: self)
     self.componentDelegate = Delegate(component: self)
   }
@@ -169,7 +174,8 @@ import Tailor
     var userInterface: UserInterface! = userInterface
 
     if userInterface == nil, model.kind == .list {
-      userInterface = TableView()
+      let tableView = TableView()
+      userInterface = tableView
     } else {
       let collectionView = CollectionView(frame: CGRect.zero)
       collectionView.collectionViewLayout = ComponentFlowLayout()
@@ -223,10 +229,8 @@ import Tailor
     configureDataSourceAndDelegate()
 
     if let tableView = self.tableView {
-      documentView.addSubview(tableView)
       setupTableView(tableView, with: size)
     } else if let collectionView = self.collectionView {
-      documentView.addSubview(collectionView)
       setupCollectionView(collectionView, with: size)
     }
 
@@ -249,7 +253,7 @@ import Tailor
     }
 
     layoutHeaderFooterViews(size)
-    view.layoutSubviews()
+    //view.layoutSubviews()
 
     if model.items.isEmpty, !model.layout.showEmptyComponent {
       if animated {
@@ -287,6 +291,7 @@ import Tailor
     let backgroundView = NSView()
     backgroundView.wantsLayer = true
     collectionView.backgroundView = backgroundView
+    scrollView.documentView = collectionView
 
     switch model.kind {
     case .carousel:
@@ -383,6 +388,10 @@ import Tailor
       }
     }
 
+    if let window = view.window, size.width > window.frame.size.width {
+      size.width = window.frame.size.width
+    }
+
     return size
   }
 
@@ -391,8 +400,10 @@ import Tailor
       reload(nil)
     } else {
       if let tableView = tableView {
+        tableView.frame.size.width = size.width
         resizeTableView(tableView, with: size, type: type)
       } else if let collectionView = collectionView {
+        collectionView.frame.size.width = size.width
         resizeCollectionView(collectionView, with: size, type: type)
       }
     }
@@ -404,6 +415,12 @@ import Tailor
 
   /// This method is invoked after mutations has been performed on a component.
   public func afterUpdate() {
+    defer {
+      if model.index == 0 {
+        view.window?.makeFirstResponder(responder)
+      }
+    }
+
     state = .ready
     if let superview = view.superview {
       let size = CGSize(width: superview.frame.width,

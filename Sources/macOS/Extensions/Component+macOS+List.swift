@@ -19,13 +19,14 @@ extension Component {
     tableView.allowsColumnSelection = false
     tableView.allowsEmptySelection = true
     tableView.allowsMultipleSelection = false
-    tableView.headerView = nil
     tableView.selectionHighlightStyle = .none
     tableView.allowsTypeSelect = true
     tableView.focusRingType = .none
     tableView.target = self
     tableView.action = #selector(self.singleMouseClick(_:))
     tableView.doubleAction = #selector(self.doubleMouseClick(_:))
+
+    scrollView.documentView = tableView
 
     guard tableView.tableColumns.isEmpty else {
       return
@@ -35,6 +36,7 @@ extension Component {
     column.maxWidth = 250
     column.width = 250
     column.minWidth = 150
+    column.isHidden = true
 
     tableView.addTableColumn(column)
   }

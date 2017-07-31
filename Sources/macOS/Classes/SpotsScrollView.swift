@@ -3,6 +3,24 @@ import Cocoa
 open class SpotsScrollView: NSScrollView {
   override open var isFlipped: Bool { return true }
 
+  override public var contentOffset: CGPoint {
+    get {
+      return contentView.visibleRect.origin
+    }
+    set(newValue) {
+      contentView.scroll(to: newValue)
+      alignViews()
+    }
+  }
+
+  func alignViews() {
+    CATransaction.begin()
+    Dispatch.after(seconds: 0.05) {
+      self.layoutViews(animated: false)
+      CATransaction.commit()
+    }
+  }
+
   /// When enabled, the last `Component` in the collection will be stretched to occupy the remaining space.
   /// This can be enabled globally by setting `Configuration.stretchLastComponent` to `true`.
   ///
@@ -41,16 +59,22 @@ open class SpotsScrollView: NSScrollView {
   /// The document view of SpotsScrollView.
   lazy open var componentsView: SpotsContentView = {
     let contentView = SpotsContentView()
-    contentView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
-    contentView.autoresizesSubviews = true
-
+//    contentView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+//    contentView.autoresizesSubviews = true
     return contentView
   }()
 
   override init(frame frameRect: NSRect) {
     super.init(frame: frameRect)
-    self.documentView = componentsView
+    let flippedView = FlippedView()
+    self.documentView = flippedView
+    flippedView.addSubview(componentsView)
     drawsBackground = false
+    NotificationCenter.default.addObserver(self, selector: #selector(boundsDidChange(_:)), name: NSNotification.Name.NSViewBoundsDidChange, object: nil)
+  }
+
+  func boundsDidChange(_ notification: Notification) {
+//    layoutViews(animated: false)
   }
 
   required public init?(coder: NSCoder) {
@@ -64,19 +88,19 @@ open class SpotsScrollView: NSScrollView {
     }
   }
 
-  /// Allows keyed coding.
-  ///
-  /// - Returns: Always returns true.
-  func allowsKeyedCoding() -> Bool {
-    return true
-  }
-
   private func observeView(_ view: NSView) {
-    guard observedViews.contains(where: { $0 == view }) else {
+    guard !observedViews.contains(where: { $0 == view }) else {
       return
     }
 
-    view.addObserver(self, forKeyPath: #keyPath(frame), options: .old, context: subviewContext)
+    if let scrollView = view as? ScrollView {
+//      scrollView.addObserver(self, forKeyPath: #keyPath(frame), options: [.new, .old], context: subviewContext)
+//      scrollView.addObserver(self, forKeyPath: #keyPath(bounds), options: .old, context: subviewContext)
+    } else {
+      view.addObserver(self, forKeyPath: #keyPath(frame), options: .old, context: subviewContext)
+      view.addObserver(self, forKeyPath: #keyPath(bounds), options: .old, context: subviewContext)
+    }
+
     observedViews.append(view)
   }
 
@@ -85,7 +109,14 @@ open class SpotsScrollView: NSScrollView {
       return
     }
 
-    view.removeObserver(self, forKeyPath: #keyPath(frame), context: subviewContext)
+    if let scrollView = view as? ScrollView {
+//      scrollView.removeObserver(self, forKeyPath: #keyPath(frame), context: subviewContext)
+//      scrollView.removeObserver(self, forKeyPath: #keyPath(bounds), context: subviewContext)
+    } else {
+      view.removeObserver(self, forKeyPath: #keyPath(frame), context: subviewContext)
+      view.removeObserver(self, forKeyPath: #keyPath(bounds), context: subviewContext)
+    }
+
     observedViews.remove(at: index)
   }
 
@@ -113,9 +144,23 @@ open class SpotsScrollView: NSScrollView {
 
   open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
     if let change = change, let view = object as? View, context == subviewContext {
-      if let value = change[NSKeyValueChangeKey.oldKey] as? NSValue, keyPath == #keyPath(frame) {
-        if value.rectValue != view.frame {
-          layoutSubtreeIfNeeded()
+      if let value = change[NSKeyValueChangeKey.oldKey] as? NSValue {
+        guard view.frame.intersects(visibleRect) else {
+          return
+        }
+
+        guard let keyPath = keyPath else {
+          return
+        }
+
+        switch keyPath {
+        case #keyPath(frame):
+          if value.rectValue != view.frame {
+            layoutViews(animated: false)
+          }
+        default:
+//          Swift.print(keyPath)
+          break
         }
       }
     }
@@ -127,6 +172,11 @@ open class SpotsScrollView: NSScrollView {
 
   open override func viewDidMoveToWindow() {
     layoutSubtreeIfNeeded()
+  }
+
+  open override func layoutSubtreeIfNeeded() {
+    super.layoutSubtreeIfNeeded()
+    layoutViews(animated: false)
   }
 
   /// Layout all subviews in the collection ordered by `subviewsInLayoutOrder` on `SpotsContentView`.
@@ -144,85 +194,82 @@ open class SpotsScrollView: NSScrollView {
       frame.size.width += 1
     }
 
-    var yOffsetOfCurrentSubview: CGFloat = CGFloat(self.inset?.top ?? 0.0)
-    let lastView = componentsView.subviewsInLayoutOrder.last
-
-    for subview in componentsView.subviewsInLayoutOrder {
-      if let scrollView = subview as? ScrollView {
-        var contentOffset = scrollView.contentOffset
-        var frame = scrollView.frame
-        if self.contentOffset.y <= yOffsetOfCurrentSubview {
-          contentOffset.y = 0.0
-          frame.origin.y = yOffsetOfCurrentSubview
-        }
-
-        frame.size.width = ceil(contentView.frame.size.width)
-
-        if let inset = self.inset {
-          frame.size.width -= CGFloat(inset.left + inset.right)
-          frame.origin.x = CGFloat(inset.left)
-        }
-
-        if stretchLastComponent && scrollView.isEqual(lastView) {
-          let newHeight = self.frame.size.height - scrollView.frame.origin.y + self.contentOffset.y
-
-          if newHeight >= frame.size.height {
-            frame.size.height = newHeight
-          }
-
-          scrollView.frame = frame
-        } else {
-          let shouldAnimate = isAnimationsEnabled && window?.inLiveResize == false && animated
-          if shouldAnimate {
-            scrollView.animator().frame = frame
-          } else {
-            scrollView.frame = frame
-          }
-        }
-
-        scrollView.contentOffset = contentOffset
-
-        yOffsetOfCurrentSubview += scrollView.frame.height
-      } else {
-        var frame = subview.frame
-        if self.contentOffset.y <= yOffsetOfCurrentSubview {
-          frame.origin.y = yOffsetOfCurrentSubview
-        }
-
-        frame.origin.x = 0.0
-
-        if let inset = self.inset {
-          frame.size.width -= CGFloat(inset.left + inset.right)
-          frame.origin.x -= CGFloat(inset.left)
-        }
-
-        subview.frame = frame
-        yOffsetOfCurrentSubview += subview.frame.height
-      }
-    }
-
-    yOffsetOfCurrentSubview -= CGFloat(self.inset?.bottom ?? 0.0)
-
-    guard frame.height > 0 && frame.width > 100 else {
+    guard let window = window else {
       return
     }
 
-    if frame.origin.y < 0 {
-      yOffsetOfCurrentSubview -= frame.origin.y
+    guard let superview = superview else {
+      return
+    }
+
+    componentsView.frame.size = bounds.size
+
+    var yOffsetOfCurrentSubview: CGFloat = 0.0
+    var contentOffset = self.contentOffset
+
+    for case let scrollView as ScrollView in componentsView.subviewsInLayoutOrder {
+      var frame = scrollView.frame
+      var contentOffset = scrollView.contentOffset
+
+      if self.contentOffset.y < yOffsetOfCurrentSubview {
+        contentOffset.y = 0
+        frame.origin.y = yOffsetOfCurrentSubview
+      } else {
+        contentOffset.y = self.contentOffset.y - yOffsetOfCurrentSubview
+        frame.origin.y = self.contentOffset.y
+      }
+
+      let remainingBoundsHeight = fmax(documentView!.visibleRect.maxY - frame.minY, 0.0)
+      let contentHeight: CGFloat
+      var shouldResize: Bool = true
+
+      guard let scrollViewDocumentView = scrollView.documentView else {
+        return
+      }
+
+      switch scrollViewDocumentView {
+      case let collectionView as CollectionView:
+        shouldResize = collectionView.flowLayout?.scrollDirection == .vertical
+        contentHeight = collectionView.collectionViewLayout?.collectionViewContentSize.height ?? 0.0
+      case let tableView as TableView:
+        contentHeight = tableView.frame.size.height
+      default:
+        contentHeight = scrollView.frame.size.height
+      }
+
+      let remainingContentHeight = fmax(contentHeight - contentOffset.y, 0.0)
+      frame.size.width = ceil(componentsView.frame.size.width)
+      frame.size.height = ceil(fmin(remainingBoundsHeight, remainingContentHeight))
+      yOffsetOfCurrentSubview += contentHeight
+
+      if shouldResize {
+        if animated == true {
+          scrollView.animator().frame = frame
+        } else {
+          CATransaction.begin()
+          CATransaction.setDisableActions(true)
+          scrollView.frame = frame
+          CATransaction.commit()
+        }
+      }
+
+      scrollViewDocumentView.enclosingScrollView?.hasVerticalScroller = false
+      scrollViewDocumentView.scroll(CGPoint(x: Int(contentOffset.x), y: Int(contentOffset.y)))
     }
 
     let frameComparison: CGFloat = frame.height - contentInsets.top - CGFloat(self.inset?.bottom ?? 0.0)
+    let newSize = CGSize(width: frame.width, height: fmax(yOffsetOfCurrentSubview, frameComparison))
 
-    documentView?.setFrameSize(CGSize(width: frame.width, height: fmax(yOffsetOfCurrentSubview, frameComparison)))
-
-    if let view = superview {
-      view.layout()
-    }
+    componentsView.setFrameSize(newSize)
+    documentView?.setFrameSize(newSize)
   }
 
-  open override func layoutSubtreeIfNeeded() {
-    super.layoutSubtreeIfNeeded()
-
+  open override func scroll(_ point: NSPoint) {
+    super.scroll(point)
     layoutViews(animated: false)
+  }
+
+  public func flippedViewDidScroll(_ flippedView: FlippedView, to point: NSPoint) {
+    Swift.print(point)
   }
 }
