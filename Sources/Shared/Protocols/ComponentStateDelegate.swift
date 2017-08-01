@@ -3,4 +3,3 @@ public protocol ComponentStateDelegate: class {
 
   func handleState(for component: Component, from: ComponentState, to: ComponentState)
 }
-
