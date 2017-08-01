@@ -7,7 +7,7 @@ extension Delegate: NSCollectionViewDelegate {
       return
     }
 
-    self?.resolveComponentItem(at: indexPath) { component, item in
+    resolveComponentItem(at: indexPath) { component, item in
       if component.model.interaction.mouseClick == .single {
         component.delegate?.component(component, itemSelected: item)
       }
@@ -31,7 +31,7 @@ extension Delegate: NSCollectionViewDelegate {
 
       let selectedIndexes: [Int] = collectionView.selectionIndexes.map { $0 }
       if selectedIndexes.contains(indexPath.item) {
-        collectionViewItem.isSelected = true
+        item.isSelected = true
       }
       component.delegate?.component(component, willDisplay: view, item: resolvedItem)
     }
