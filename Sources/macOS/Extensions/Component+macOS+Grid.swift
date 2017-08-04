@@ -15,11 +15,10 @@ extension Component {
     if let window = collectionView.window {
       var collectionViewContentSize = collectionViewLayout.collectionViewContentSize
       collectionView.frame.size.width = collectionViewContentSize.width
-
-      if collectionViewContentSize.height <= window.frame.size.height {
-        collectionView.frame.size.height = collectionViewContentSize.height
-      }
-      scrollView.frame.size = collectionViewContentSize
+//      collectionView.frame.size.height = collectionViewContentSize.height
+//      documentView.frame.size = collectionViewContentSize
+//      scrollView.frame.size = collectionViewContentSize
+//      Swift.print("🗣 \(documentView.frame.size)")
     }
   }
 

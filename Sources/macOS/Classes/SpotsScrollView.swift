@@ -3,12 +3,14 @@ import Cocoa
 open class SpotsScrollView: NSScrollView {
   override open var isFlipped: Bool { return true }
 
+  public var isScrolling: Bool = false
+
   override public var contentOffset: CGPoint {
     get {
-      return contentView.visibleRect.origin
+      return documentView!.visibleRect.origin
     }
     set(newValue) {
-      contentView.scroll(to: newValue)
+      documentView?.scroll(newValue)
       alignViews()
     }
   }
@@ -70,11 +72,13 @@ open class SpotsScrollView: NSScrollView {
     self.documentView = flippedView
     flippedView.addSubview(componentsView)
     drawsBackground = false
-    NotificationCenter.default.addObserver(self, selector: #selector(boundsDidChange(_:)), name: NSNotification.Name.NSViewBoundsDidChange, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(scrollViewDidScroll(_:)), name: NSNotification.Name.NSScrollViewWillStartLiveScroll, object: self)
+    NotificationCenter.default.addObserver(self, selector: #selector(scrollViewDidScroll(_:)), name: NSNotification.Name.NSScrollViewDidLiveScroll, object: self)
+    NotificationCenter.default.addObserver(self, selector: #selector(scrollViewDidScroll(_:)), name: NSNotification.Name.NSScrollViewDidEndLiveScroll, object: self)
   }
 
-  func boundsDidChange(_ notification: Notification) {
-//    layoutViews(animated: false)
+  open func scrollViewDidScroll(_ notification: NSNotification) {
+    layoutViews(animated: false)
   }
 
   required public init?(coder: NSCoder) {
@@ -252,8 +256,6 @@ open class SpotsScrollView: NSScrollView {
           CATransaction.commit()
         }
       }
-
-      scrollViewDocumentView.enclosingScrollView?.hasVerticalScroller = false
       scrollViewDocumentView.scroll(CGPoint(x: Int(contentOffset.x), y: Int(contentOffset.y)))
     }
 
@@ -264,8 +266,14 @@ open class SpotsScrollView: NSScrollView {
     documentView?.setFrameSize(newSize)
   }
 
+  open override func scrollWheel(with event: NSEvent) {
+    super.scrollWheel(with: event)
+//    layoutViews(animated: false)
+  }
+
   open override func scroll(_ point: NSPoint) {
     super.scroll(point)
+    Swift.print(#function)
     layoutViews(animated: false)
   }
 

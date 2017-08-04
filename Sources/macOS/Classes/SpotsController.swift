@@ -286,8 +286,6 @@ open class SpotsController: NSViewController, SpotsProtocol {
       return
     }
 
-    scrollView.layoutViews(animated: false)
-
     guard let delegate = scrollDelegate,
       let _ = NSApplication.shared().mainWindow
       else {

@@ -165,6 +165,7 @@ import Tailor
     userInterface.register()
     self.componentDataSource = DataSource(component: self)
     self.componentDelegate = Delegate(component: self)
+//    self.scrollView.documentView = documentView
   }
 
   /// A convenience init for creating a component with a `ComponentModel`.
@@ -177,7 +178,7 @@ import Tailor
       let tableView = TableView()
       userInterface = tableView
     } else {
-      let collectionView = CollectionView(frame: CGRect.zero)
+      let collectionView = ComponentCollectionView(frame: CGRect.zero)
       collectionView.collectionViewLayout = ComponentFlowLayout()
       userInterface = collectionView
     }
@@ -291,6 +292,7 @@ import Tailor
     let backgroundView = NSView()
     backgroundView.wantsLayer = true
     collectionView.backgroundView = backgroundView
+//    documentView.addSubview(collectionView)
     scrollView.documentView = collectionView
 
     switch model.kind {

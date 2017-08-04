@@ -231,6 +231,13 @@ open class SpotsScrollView: UIScrollView, UIGestureRecognizerDelegate {
         let remainingBoundsHeight = fmax(bounds.maxY - frame.minY, 0.0)
         let remainingContentHeight = fmax(scrollView.contentSize.height - contentOffset.y, 0.0)
 
+
+
+        Swift.print("\(subviewsInLayoutOrder.index(of: scrollView)) bounds.maxY: \(bounds.maxY)")
+        Swift.print("\(subviewsInLayoutOrder.index(of: scrollView)) frame.minY: \(frame.minY)")
+        Swift.print("\(subviewsInLayoutOrder.index(of: scrollView)) remainingBoundsHeight: \(remainingBoundsHeight)")
+        Swift.print("\(subviewsInLayoutOrder.index(of: scrollView)) remainingContentHeight: \(remainingContentHeight)")
+
         if stretchLastComponent && scrollView.isEqual(lastView) {
           let newHeight = self.frame.size.height - scrollView.frame.origin.y + self.contentOffset.y
           frame.size.height = newHeight
