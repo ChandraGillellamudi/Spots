@@ -11,16 +11,28 @@ extension UITableView: UserInterface {
     Configuration.register(view: ListWrapper.self, identifier: TableView.compositeIdentifier)
     register(ListWrapper.self, forCellReuseIdentifier: TableView.compositeIdentifier)
 
+    if Configuration.views.defaultItem == nil {
+      register(ListWrapper.self, forCellReuseIdentifier: Configuration.views.defaultIdentifier)
+    }
+
     for (identifier, item) in Configuration.views.storage {
       if identifier.contains(CompositeComponent.identifier) {
         continue
       }
 
       switch item {
-      case .classType(_):
-        register(ListHeaderFooterWrapper.self, forHeaderFooterViewReuseIdentifier: identifier)
-        register(ListWrapper.self, forCellReuseIdentifier: Configuration.views.defaultIdentifier)
-        register(ListWrapper.self, forCellReuseIdentifier: identifier)
+      case .classType(let type):
+        if type is UITableViewCell.Type {
+          register(type, forCellReuseIdentifier: identifier)
+        } else {
+          register(ListWrapper.self, forCellReuseIdentifier: identifier)
+        }
+
+        if type is UITableViewHeaderFooterView.Type {
+          register(type, forHeaderFooterViewReuseIdentifier: identifier)
+        } else {
+          register(ListHeaderFooterWrapper.self, forHeaderFooterViewReuseIdentifier: identifier)
+        }
       case .nib(let nib):
         register(nib, forCellReuseIdentifier: identifier)
       }

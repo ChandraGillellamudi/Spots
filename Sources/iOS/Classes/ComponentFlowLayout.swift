@@ -113,6 +113,8 @@ open class ComponentFlowLayout: UICollectionViewFlowLayout {
       contentSize.height += component.headerHeight
       contentSize.height += component.footerHeight
     }
+
+    component.model.size = contentSize
   }
 
   /// Returns the layout attributes for all of the cells and views in the specified rectangle.
@@ -168,14 +170,16 @@ open class ComponentFlowLayout: UICollectionViewFlowLayout {
           } else {
             nextY = itemAttribute.frame.maxY + minimumLineSpacing
           }
+
+          attributes.append(itemAttribute)
         } else {
           itemAttribute.frame.origin.y += component.headerHeight
-        }
-
-        // Only add item attributes if the item frame insects the rect passed into the method.
-        // This removes unwanted computation when a collection view scrolls.
-        if itemAttribute.frame.intersects(rect) {
-          attributes.append(itemAttribute)
+          // Only add item attributes if the item frame insects the rect passed into the method.
+          // This removes unwanted computation when a collection view scrolls.
+          // Note that this only applies to vertical components.
+          if itemAttribute.frame.intersects(rect) {
+            attributes.append(itemAttribute)
+          }
         }
 
         if index >= cachedFrames.count {
@@ -359,7 +363,11 @@ open class ComponentFlowLayout: UICollectionViewFlowLayout {
       }
 
       attributes.zIndex = -1
-      attributes.alpha = 1.0
+
+      if type == .insert {
+        attributes.alpha = 0.0
+      }
+
       attributes.center = .init(x: attributes.center.x,
                                 y: attributes.center.y - attributes.frame.size.height)
     }

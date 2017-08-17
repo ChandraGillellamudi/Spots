@@ -89,7 +89,13 @@ public class Component: NSObject, ComponentHorizontallyScrollable {
   }
 
   /// The underlying view for this component, usually UITableView or UICollectionView
-  public var view: ScrollView
+  public var view: ScrollView {
+    didSet {
+      if let userInterface = view as? UserInterface {
+        userInterface.register()
+      }
+    }
+  }
 
   /// A computed variable that casts the current `userInterface` into a `UITableView`.
   /// It will return `nil` if the model kind is not `.list`.
@@ -346,5 +352,8 @@ public class Component: NSObject, ComponentHorizontallyScrollable {
     if !compositeComponents.isEmpty {
       setup(with: view.frame.size)
     }
+
+    pageControl.numberOfPages = model.items.count
+    view.superview?.layoutIfNeeded()
   }
 }

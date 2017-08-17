@@ -358,17 +358,19 @@ public class ComponentManager {
         return
       }
 
-      let oldItems = component.model.items
-      component.model.items = items
-      component.prepareItems(recreateComposites: true)
+      let duplicatedComponent = Component(model: component.model)
+      duplicatedComponent.model.items = items
+      duplicatedComponent.setup(with: component.view.frame.size)
 
-      guard let changes = self.diffManager.compare(oldItems: oldItems, newItems: component.model.items) else {
+      guard let changes = self.diffManager.compare(oldItems: component.model.items, newItems: duplicatedComponent.model.items) else {
         completion?()
         return
       }
 
       component.beforeUpdate()
-      component.reloadIfNeeded(changes, withAnimation: animation, updateDataSource: {}) {
+      component.reloadIfNeeded(changes, withAnimation: animation, updateDataSource: {
+        component.model.items = duplicatedComponent.model.items
+      }) {
         self.finishComponentOperation(component, updateHeightAndIndexes: true, completion: completion)
       }
     }

@@ -11,23 +11,38 @@ extension UICollectionView: UserInterface {
     Configuration.register(view: GridWrapper.self, identifier: CollectionView.compositeIdentifier)
     register(GridWrapper.self, forCellWithReuseIdentifier: CollectionView.compositeIdentifier)
 
+    if Configuration.views.defaultItem == nil {
+      register(GridWrapper.self, forCellWithReuseIdentifier: Configuration.views.defaultIdentifier)
+    }
+
     for (identifier, item) in Configuration.views.storage {
       if identifier.contains(CompositeComponent.identifier) {
         continue
       }
 
       switch item {
-      case .classType(_):
-        register(GridHeaderFooterWrapper.self,
-                 forSupplementaryViewOfKind: UICollectionElementKindSectionHeader,
-                 withReuseIdentifier: identifier)
-        register(GridHeaderFooterWrapper.self,
-                 forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
-                 withReuseIdentifier: identifier)
-        register(GridWrapper.self,
-                 forCellWithReuseIdentifier: identifier)
-        register(GridWrapper.self,
-                 forCellWithReuseIdentifier: Configuration.views.defaultIdentifier)
+      case .classType(let type):
+        if type is UICollectionViewCell.Type {
+          register(type, forCellWithReuseIdentifier: identifier)
+        } else {
+          register(GridWrapper.self, forCellWithReuseIdentifier: identifier)
+        }
+
+        if type is UICollectionReusableView.Type {
+          register(type,
+                   forSupplementaryViewOfKind: UICollectionElementKindSectionHeader,
+                   withReuseIdentifier: identifier)
+          register(type,
+                   forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
+                   withReuseIdentifier: identifier)
+        } else {
+          register(GridHeaderFooterWrapper.self,
+                   forSupplementaryViewOfKind: UICollectionElementKindSectionHeader,
+                   withReuseIdentifier: identifier)
+          register(GridHeaderFooterWrapper.self,
+                   forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
+                   withReuseIdentifier: identifier)
+        }
       case .nib(let nib):
         register(nib, forCellWithReuseIdentifier: identifier)
       }
