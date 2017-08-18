@@ -22,7 +22,7 @@ public class ItemManager {
 
     let inset = CGFloat(component.model.layout.inset.left + component.model.layout.inset.right)
     let componentWidth: CGFloat = component.view.frame.size.width - inset
-    return (componentWidth / CGFloat(component.model.layout.span)) - CGFloat(component.model.layout.itemSpacing)
+    return max((componentWidth / CGFloat(component.model.layout.span)) - CGFloat(component.model.layout.itemSpacing), 0)
   }
 
   func prepareItems(component: Component, recreateComposites: Bool = true) {
@@ -240,5 +240,37 @@ public class ItemManager {
     if let view = view as? View, item.size.width == 0.0 || item.size.width > view.bounds.width {
       item.size.width = view.bounds.width
     }
+  }
+
+  /// Resolve size property for an item at index path inside component.
+  /// This method is used to ensure that user interface never receive negative
+  /// size values as that can lead to the user interface implementation throwing
+  /// an exception.
+  ///
+  /// - Parameters:
+  ///   - indexPath: The index path of the item.
+  ///   - component: The component that item resides in.
+  /// - Returns: The size of the item, unless the size is negative, then it will return zero.
+  public func sizeForItem(at indexPath: IndexPath, in component: Component) -> CGSize {
+    var size = component.item(at: indexPath)?.size ?? .zero
+    size.width = max(size.width, 0)
+    size.height = max(size.height, 0)
+
+    #if os(macOS)
+      // Make sure that the item width never exceeds the frame view width.
+      // If it does exceed the maximum width, the layout span will be used to reduce the size to make sure
+      // that all items fit on the same row.
+      if component.model.layout.span > 0 {
+        let inset = CGFloat(component.model.layout.inset.left + component.model.layout.inset.right)
+        let maxWidth = size.width * CGFloat(component.model.layout.span) + inset
+
+        if maxWidth > component.view.frame.size.width {
+          size.width -= CGFloat(component.model.layout.span)
+          size.width = round(size.width)
+        }
+      }
+    #endif
+
+    return size
   }
 }
