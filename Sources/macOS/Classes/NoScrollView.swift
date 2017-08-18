@@ -4,13 +4,18 @@ fileprivate class SpotClipView: NSClipView {
 
   override func scroll(to newOrigin: NSPoint) {
     super.scroll(to: newOrigin)
-    if let scrollView = superview?.enclosingScrollView as? SpotsScrollView {
-//      scrollView.contentOffset = newOrigin
-//      scrollView.contentView.scroll(to: newOrigin)
+
+    guard let scrollView = superview?.enclosingScrollView as? SpotsScrollView else {
+      return
     }
+
+    scrollView.contentOffset = newOrigin
+
+//
+//      scrollView.layoutViews(animated: false, adjustScroll: false)
+//      scrollView.contentView.scroll(newOrigin)
+//    }
   }
-
-
 }
 
 open class NoScrollView: NSScrollView {
@@ -33,7 +38,7 @@ open class NoScrollView: NSScrollView {
     automaticallyAdjustsContentInsets = false
     scrollerStyle = .overlay
     contentView = SpotClipView()
-//    contentView.postsBoundsChangedNotifications = true
+    contentView.postsBoundsChangedNotifications = true
 //    contentView.postsFrameChangedNotifications = true
   }
 

@@ -5,13 +5,16 @@ open class SpotsScrollView: NSScrollView {
 
   public var isScrolling: Bool = false
 
+  static open override func isCompatibleWithResponsiveScrolling() -> Bool {
+    return true
+  }
+
   override public var contentOffset: CGPoint {
     get {
       return documentView!.visibleRect.origin
     }
     set(newValue) {
       documentView?.scroll(newValue)
-      alignViews()
     }
   }
 
@@ -69,15 +72,31 @@ open class SpotsScrollView: NSScrollView {
   override init(frame frameRect: NSRect) {
     super.init(frame: frameRect)
     let flippedView = FlippedView()
-    self.documentView = flippedView
-    flippedView.addSubview(componentsView)
+    self.documentView = componentsView
     drawsBackground = false
-    NotificationCenter.default.addObserver(self, selector: #selector(scrollViewDidScroll(_:)), name: NSNotification.Name.NSScrollViewWillStartLiveScroll, object: self)
-    NotificationCenter.default.addObserver(self, selector: #selector(scrollViewDidScroll(_:)), name: NSNotification.Name.NSScrollViewDidLiveScroll, object: self)
+    scrollerStyle = .legacy
+    scrollsDynamically = true
+
+    let defaultCenter = NotificationCenter.default
+
+    defaultCenter.addObserver(self, selector: #selector(willStartLiveScroll(_:)), name: NSNotification.Name.NSScrollViewWillStartLiveScroll, object: self)
+    defaultCenter.addObserver(self, selector: #selector(didLiveScroll(_:)), name: NSNotification.Name.NSScrollViewDidLiveScroll, object: self)
+    defaultCenter.addObserver(self, selector: #selector(didEndLiveScroll(_:)), name: NSNotification.Name.NSScrollViewDidEndLiveScroll, object: self)
   }
 
-  open func scrollViewDidScroll(_ notification: NSNotification) {
+  open func willStartLiveScroll(_ notification: NSNotification) {
     layoutViews(animated: false)
+    Swift.print(#function)
+  }
+
+  func didLiveScroll(_ notification: NSNotification) {
+    layoutViews(animated: false)
+    Swift.print(#function)
+  }
+
+  func didEndLiveScroll(_ notification: NSNotification) {
+    layoutViews(animated: false)
+    Swift.print(#function)
   }
 
   required public init?(coder: NSCoder) {
@@ -179,10 +198,6 @@ open class SpotsScrollView: NSScrollView {
     }
   }
 
-  open func isCompatibleWithResponsiveScrolling() -> Bool {
-    return true
-  }
-
   open override func viewDidMoveToWindow() {
     layoutSubtreeIfNeeded()
   }
@@ -209,7 +224,7 @@ open class SpotsScrollView: NSScrollView {
       return
     }
 
-    componentsView.frame.size = bounds.size
+    componentsView.frame.size.width = bounds.size.width
 
     var yOffsetOfCurrentSubview: CGFloat = 0.0
     var contentOffset = self.contentOffset
@@ -267,20 +282,28 @@ open class SpotsScrollView: NSScrollView {
     let newSize = CGSize(width: frame.width, height: fmax(yOffsetOfCurrentSubview, frameComparison))
 
     componentsView.setFrameSize(newSize)
-    documentView?.setFrameSize(newSize)
+  }
+
+  open override func scrollPageUp(_ sender: Any?) {
+    super.scrollPageUp(nil)
+
+    Swift.print(#function)
   }
 
   open override func scrollWheel(with event: NSEvent) {
     super.scrollWheel(with: event)
-//    layoutViews(animated: false)
+    layoutViews(animated: false)
+    Swift.print(#function)
+  }
+
+  open override func scroll(_ rect: NSRect, by delta: NSSize) {
+    super.scrollToVisible(rect)
+    Swift.print(#function)
   }
 
   open override func scroll(_ point: NSPoint) {
     super.scroll(point)
+    Swift.print(#function)
     layoutViews(animated: false)
-  }
-
-  public func flippedViewDidScroll(_ flippedView: FlippedView, to point: NSPoint) {
-    Swift.print(point)
   }
 }
