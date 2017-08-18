@@ -164,7 +164,7 @@ open class SpotsController: NSViewController, SpotsProtocol {
       view = visualEffectView
     }
 
-    view.autoresizingMask = .viewWidthSizable
+    view.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
     view.autoresizesSubviews = true
     self.view = view
   }
@@ -174,7 +174,6 @@ open class SpotsController: NSViewController, SpotsProtocol {
    */
   open override func viewDidLoad() {
     super.viewDidLoad()
-
     view.addSubview(scrollView)
     scrollView.hasVerticalScroller = true
     scrollView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
@@ -224,7 +223,7 @@ open class SpotsController: NSViewController, SpotsProtocol {
 
   public func setupComponent(at index: Int, component: Component) {
     components[index].model.index = index
-    component.setup(with: CGSize(width: view.frame.width, height: view.frame.size.height))
+    component.setup(with: view.frame.size)
     component.model.size = CGSize(
       width: view.frame.width,
       height: ceil(component.view.frame.height))

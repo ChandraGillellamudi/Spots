@@ -8,18 +8,19 @@ extension Component {
     }
 
     collectionView.frame.size.width = size.width
-//    collectionView.frame.origin.y = headerHeight
     collectionViewLayout.prepare()
     collectionViewLayout.invalidateLayout()
 
-    if let window = collectionView.window {
-      var collectionViewContentSize = collectionViewLayout.collectionViewContentSize
-      collectionView.frame.size.width = collectionViewContentSize.width
-//      collectionView.frame.size.height = collectionViewContentSize.height
-//      documentView.frame.size = collectionViewContentSize
-//      scrollView.frame.size = collectionViewContentSize
-//      Swift.print("🗣 \(documentView.frame.size)")
+    guard let window = collectionView.window else {
+      return
     }
+
+    let collectionViewContentSize = collectionViewLayout.collectionViewContentSize
+    let newHeight = collectionViewContentSize.height > size.height
+      ? size.height
+      : collectionViewContentSize.height
+    collectionView.frame.size.width = collectionViewContentSize.width
+    collectionView.frame.size.height = collectionViewContentSize.height
   }
 
   func resizeVerticalCollectionView(_ collectionView: CollectionView, with size: CGSize, type: ComponentResize) {

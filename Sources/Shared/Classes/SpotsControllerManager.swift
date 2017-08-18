@@ -512,7 +512,6 @@ public class SpotsControllerManager {
 
       SpotsController.componentsDidReloadComponentModels?(controller)
       controller.scrollView.layoutSubviews()
-
       if performCleanup {
         controller.scrollView.contentOffset = previousContentOffset
       }

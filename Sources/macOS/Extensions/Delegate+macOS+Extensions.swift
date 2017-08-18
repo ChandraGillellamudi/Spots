@@ -11,6 +11,9 @@ extension Delegate: NSCollectionViewDelegate {
       if component.model.interaction.mouseClick == .single {
         component.delegate?.component(component, itemSelected: item)
       }
+
+      let indexes = indexPaths.flatMap { $0.item }
+      component.delegate?.component(component, didChangeSelection: indexes)
     }
   }
 

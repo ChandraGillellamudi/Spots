@@ -1,5 +1,18 @@
 import Cocoa
 
+fileprivate class SpotClipView: NSClipView {
+
+  override func scroll(to newOrigin: NSPoint) {
+    super.scroll(to: newOrigin)
+    if let scrollView = superview?.enclosingScrollView as? SpotsScrollView {
+//      scrollView.contentOffset = newOrigin
+//      scrollView.contentView.scroll(to: newOrigin)
+    }
+  }
+
+
+}
+
 open class NoScrollView: NSScrollView {
 
   var scrollingEnabled: Bool = true
@@ -19,6 +32,9 @@ open class NoScrollView: NSScrollView {
     scrollsDynamically = true
     automaticallyAdjustsContentInsets = false
     scrollerStyle = .overlay
+    contentView = SpotClipView()
+//    contentView.postsBoundsChangedNotifications = true
+//    contentView.postsFrameChangedNotifications = true
   }
 
   required public init?(coder: NSCoder) {
@@ -29,7 +45,7 @@ open class NoScrollView: NSScrollView {
     if theEvent.scrollingDeltaX != 0.0 && horizontalScroller != nil && scrollingEnabled {
       super.scrollWheel(with: theEvent)
     } else if theEvent.scrollingDeltaY != 0.0 {
-      nextResponder?.scrollWheel(with: theEvent)
+      enclosingScrollView?.scrollWheel(with: theEvent)
     }
   }
 

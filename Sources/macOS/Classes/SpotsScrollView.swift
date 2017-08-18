@@ -74,7 +74,6 @@ open class SpotsScrollView: NSScrollView {
     drawsBackground = false
     NotificationCenter.default.addObserver(self, selector: #selector(scrollViewDidScroll(_:)), name: NSNotification.Name.NSScrollViewWillStartLiveScroll, object: self)
     NotificationCenter.default.addObserver(self, selector: #selector(scrollViewDidScroll(_:)), name: NSNotification.Name.NSScrollViewDidLiveScroll, object: self)
-    NotificationCenter.default.addObserver(self, selector: #selector(scrollViewDidScroll(_:)), name: NSNotification.Name.NSScrollViewDidEndLiveScroll, object: self)
   }
 
   open func scrollViewDidScroll(_ notification: NSNotification) {
@@ -98,8 +97,7 @@ open class SpotsScrollView: NSScrollView {
     }
 
     if let scrollView = view as? ScrollView {
-//      scrollView.addObserver(self, forKeyPath: #keyPath(frame), options: [.new, .old], context: subviewContext)
-//      scrollView.addObserver(self, forKeyPath: #keyPath(bounds), options: .old, context: subviewContext)
+      scrollView.addObserver(self, forKeyPath: #keyPath(frame), options: .old, context: subviewContext)
     } else {
       view.addObserver(self, forKeyPath: #keyPath(frame), options: .old, context: subviewContext)
       view.addObserver(self, forKeyPath: #keyPath(bounds), options: .old, context: subviewContext)
@@ -114,8 +112,7 @@ open class SpotsScrollView: NSScrollView {
     }
 
     if let scrollView = view as? ScrollView {
-//      scrollView.removeObserver(self, forKeyPath: #keyPath(frame), context: subviewContext)
-//      scrollView.removeObserver(self, forKeyPath: #keyPath(bounds), context: subviewContext)
+      scrollView.removeObserver(self, forKeyPath: #keyPath(frame), context: subviewContext)
     } else {
       view.removeObserver(self, forKeyPath: #keyPath(frame), context: subviewContext)
       view.removeObserver(self, forKeyPath: #keyPath(bounds), context: subviewContext)
@@ -135,7 +132,17 @@ open class SpotsScrollView: NSScrollView {
     for subview in componentsView.subviews {
       observeView(subview)
     }
+
+    applyTabFix()
     layoutViews(animated: true)
+  }
+
+  fileprivate func applyTabFix() {
+    if #available(OSX 10.12, *) {
+      // Workaround to fix the contentInset when using tabs.
+      frame.size.width -= 1
+      frame.size.width += 1
+    }
   }
 
   /// Will remove subview from container.
@@ -143,30 +150,32 @@ open class SpotsScrollView: NSScrollView {
   /// - Parameter subview: The subview that will be removed.
   open override func willRemoveSubview(_ subview: View) {
     unobserveView(subview)
+    applyTabFix()
     layoutViews(animated: true)
   }
 
   open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-    if let change = change, let view = object as? View, context == subviewContext {
+    guard let change = change, context == subviewContext else {
+      return
+    }
+
+    switch object {
+    case let view as View:
+      guard view.frame.intersects(visibleRect) else {
+        return
+      }
+
+      guard let keyPath = keyPath else {
+        return
+      }
+
       if let value = change[NSKeyValueChangeKey.oldKey] as? NSValue {
-        guard view.frame.intersects(visibleRect) else {
-          return
-        }
-
-        guard let keyPath = keyPath else {
-          return
-        }
-
-        switch keyPath {
-        case #keyPath(frame):
-          if value.rectValue != view.frame {
-            layoutViews(animated: false)
-          }
-        default:
-//          Swift.print(keyPath)
-          break
+        if value.rectValue != view.frame {
+          layoutViews(animated: false)
         }
       }
+    default:
+      break
     }
   }
 
@@ -190,12 +199,6 @@ open class SpotsScrollView: NSScrollView {
   public func layoutViews(animated: Bool = true) {
     guard superview != nil else {
       return
-    }
-
-    if #available(OSX 10.12, *) {
-      // Workaround to fix the contentInset when using tabs.
-      frame.size.width -= 1
-      frame.size.width += 1
     }
 
     guard let window = window else {
@@ -256,6 +259,7 @@ open class SpotsScrollView: NSScrollView {
           CATransaction.commit()
         }
       }
+
       scrollViewDocumentView.scroll(CGPoint(x: Int(contentOffset.x), y: Int(contentOffset.y)))
     }
 
@@ -273,7 +277,6 @@ open class SpotsScrollView: NSScrollView {
 
   open override func scroll(_ point: NSPoint) {
     super.scroll(point)
-    Swift.print(#function)
     layoutViews(animated: false)
   }
 
