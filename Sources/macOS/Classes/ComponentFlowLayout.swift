@@ -86,6 +86,10 @@ public class ComponentFlowLayout: FlowLayout {
         return attributes
     }
 
+    guard let window = component.view.window else {
+      return attributes
+    }
+
     guard let newAttributes = self.layoutAttributes else {
       return attributes
     }
@@ -96,6 +100,16 @@ public class ComponentFlowLayout: FlowLayout {
     for attribute in newAttributes {
       guard let itemAttribute = attribute.copy() as? NSCollectionViewLayoutAttributes else {
         continue
+      }
+
+      if let scrollView = collectionView.enclosingScrollView {
+        let visibleRect = scrollView.contentView.visibleRect
+//        let additionalOffset: CGFloat = 0
+//        visibleRect.origin.y -= additionalOffset
+//        visibleRect.size.height += additionalOffset
+        guard visibleRect.intersects(itemAttribute.frame) else {
+          continue
+        }
       }
 
       guard let indexPath = itemAttribute.indexPath else {

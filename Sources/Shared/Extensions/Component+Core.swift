@@ -53,8 +53,8 @@ public extension Component {
     case .grid:
       height = model.size?.height ?? 0
       #if os(macOS)
-        height += headerView?.frame.size.height ?? 0
-        height += footerView?.frame.size.height ?? 0
+        height += headerHeight
+        height += footerHeight
       #endif
     case .carousel:
         height = model.size?.height ?? 0

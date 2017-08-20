@@ -2,6 +2,10 @@
 import Cocoa
 
 extension NSCollectionView: UserInterface {
+  public var selectedIndex: Int {
+    return selectionIndexes.first ?? -1
+  }
+
   public var visibleViews: [View] {
     var views = [View]()
 

@@ -18,14 +18,6 @@ open class SpotsScrollView: NSScrollView {
     }
   }
 
-  func alignViews() {
-    CATransaction.begin()
-    Dispatch.after(seconds: 0.05) {
-      self.layoutViews(animated: false)
-      CATransaction.commit()
-    }
-  }
-
   /// When enabled, the last `Component` in the collection will be stretched to occupy the remaining space.
   /// This can be enabled globally by setting `Configuration.stretchLastComponent` to `true`.
   ///
@@ -74,7 +66,6 @@ open class SpotsScrollView: NSScrollView {
     let flippedView = FlippedView()
     self.documentView = componentsView
     drawsBackground = false
-    scrollerStyle = .legacy
     scrollsDynamically = true
 
     let defaultCenter = NotificationCenter.default
@@ -86,17 +77,14 @@ open class SpotsScrollView: NSScrollView {
 
   open func willStartLiveScroll(_ notification: NSNotification) {
     layoutViews(animated: false)
-    Swift.print(#function)
   }
 
   func didLiveScroll(_ notification: NSNotification) {
     layoutViews(animated: false)
-    Swift.print(#function)
   }
 
   func didEndLiveScroll(_ notification: NSNotification) {
     layoutViews(animated: false)
-    Swift.print(#function)
   }
 
   required public init?(coder: NSCoder) {
@@ -261,7 +249,8 @@ open class SpotsScrollView: NSScrollView {
 
       let remainingContentHeight = fmax(contentHeight - contentOffset.y, 0.0)
       frame.size.width = ceil(componentsView.frame.size.width)
-      frame.size.height = ceil(fmin(remainingBoundsHeight, remainingContentHeight))
+      frame.size.height = contentHeight
+      frame.origin.y = yOffsetOfCurrentSubview
       yOffsetOfCurrentSubview += contentHeight
 
       if shouldResize {
@@ -274,8 +263,6 @@ open class SpotsScrollView: NSScrollView {
           CATransaction.commit()
         }
       }
-
-      scrollViewDocumentView.scroll(CGPoint(x: Int(contentOffset.x), y: Int(contentOffset.y)))
     }
 
     let frameComparison: CGFloat = frame.height - contentInsets.top - CGFloat(self.inset?.bottom ?? 0.0)
@@ -284,26 +271,13 @@ open class SpotsScrollView: NSScrollView {
     componentsView.setFrameSize(newSize)
   }
 
-  open override func scrollPageUp(_ sender: Any?) {
-    super.scrollPageUp(nil)
-
-    Swift.print(#function)
-  }
-
   open override func scrollWheel(with event: NSEvent) {
     super.scrollWheel(with: event)
     layoutViews(animated: false)
-    Swift.print(#function)
-  }
-
-  open override func scroll(_ rect: NSRect, by delta: NSSize) {
-    super.scrollToVisible(rect)
-    Swift.print(#function)
   }
 
   open override func scroll(_ point: NSPoint) {
     super.scroll(point)
-    Swift.print(#function)
     layoutViews(animated: false)
   }
 }

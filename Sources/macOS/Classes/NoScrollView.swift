@@ -5,16 +5,33 @@ fileprivate class SpotClipView: NSClipView {
   override func scroll(to newOrigin: NSPoint) {
     super.scroll(to: newOrigin)
 
-    guard let scrollView = superview?.enclosingScrollView as? SpotsScrollView else {
+    guard let userInterface = documentView as? UserInterface else {
       return
     }
 
-    scrollView.contentOffset = newOrigin
+    guard let view: View = userInterface.view(at: userInterface.selectedIndex) else {
+      return
+    }
 
-//
-//      scrollView.layoutViews(animated: false, adjustScroll: false)
-//      scrollView.contentView.scroll(newOrigin)
-//    }
+    guard let scrollView = superview?.enclosingScrollView else {
+      return
+    }
+
+    var actualOffset = scrollView.contentOffset.y + scrollView.contentInsets.top
+    var converted = view.convert(view.frame.origin, to: scrollView.documentView)
+    converted.y -= scrollView.contentInsets.top
+    let newRect = NSRect(origin: converted, size: view.frame.size)
+    let visibleRectMaxY = scrollView.documentVisibleRect.maxY - scrollView.contentInsets.top
+    let visibleRectMinY = scrollView.documentVisibleRect.minY
+
+    var currentOffset = scrollView.contentOffset
+    if newRect.maxY >= visibleRectMaxY {
+      currentOffset.y += view.frame.size.height
+      scrollView.contentView.scroll(currentOffset)
+    } else if visibleRectMinY > newRect.origin.y {
+      currentOffset.y -= view.frame.size.height
+      scrollView.contentView.scroll(currentOffset)
+    }
   }
 }
 

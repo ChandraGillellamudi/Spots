@@ -2,6 +2,9 @@
 import Cocoa
 
 extension NSTableView: UserInterface {
+  public var selectedIndex: Int {
+    return selectedRow
+  }
 
   public var visibleViews: [View] {
     let rows = self.rows(in: visibleRect)

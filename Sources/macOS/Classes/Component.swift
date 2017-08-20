@@ -166,6 +166,10 @@ import Tailor
     self.componentDataSource = DataSource(component: self)
     self.componentDelegate = Delegate(component: self)
 //    self.scrollView.documentView = documentView
+
+    NotificationCenter.default.addObserver(self, selector: #selector(scrollViewDidScroll(_:)), name: NSNotification.Name.NSViewBoundsDidChange, object: nil)
+
+    NotificationCenter.default.addObserver(self, selector: #selector(scrollViewDidScroll(_:)), name: NSNotification.Name.NSScrollViewDidLiveScroll, object: scrollView)
   }
 
   /// A convenience init for creating a component with a `ComponentModel`.
@@ -379,6 +383,10 @@ import Tailor
         resizeCollectionView(collectionView, with: size, type: type)
       }
     }
+  }
+
+  open func scrollViewDidScroll(_ notification: NSNotification) {
+    collectionView?.flowLayout?.invalidateLayout()
   }
 
   public func beforeUpdate() {

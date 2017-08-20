@@ -32,6 +32,8 @@ public protocol UserInterface: class {
   /// - parameter index: The index of the item you want to deselect.
   /// - parameter animated: Performs an animation if set to true
   func deselect(itemAt index: Int, animated: Bool)
+  #else
+  var selectedIndex: Int { get }
   #endif
 
   /// Find a generic UI component at index
