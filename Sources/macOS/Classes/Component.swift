@@ -117,8 +117,6 @@ import Tailor
     scrollView.contentView.postsBoundsChangedNotifications = true
     return scrollView
   }()
-  /// A normal view with a flipped coordinates system.
-  open lazy var documentView: FlippedView = FlippedView()
   /// The height of the header view.
   var headerHeight: CGFloat {
     guard let headerView = headerView else {
@@ -165,7 +163,6 @@ import Tailor
     userInterface.register()
     self.componentDataSource = DataSource(component: self)
     self.componentDelegate = Delegate(component: self)
-//    self.scrollView.documentView = documentView
 
     NotificationCenter.default.addObserver(self, selector: #selector(scrollViewDidScroll(_:)), name: NSNotification.Name.NSViewBoundsDidChange, object: nil)
 
@@ -258,7 +255,6 @@ import Tailor
     }
 
     layoutHeaderFooterViews(size)
-    //view.layoutSubviews()
 
     if model.items.isEmpty, !model.layout.showEmptyComponent {
       if animated {
@@ -296,7 +292,6 @@ import Tailor
     let backgroundView = NSView()
     backgroundView.wantsLayer = true
     collectionView.backgroundView = backgroundView
-//    documentView.addSubview(collectionView)
     scrollView.documentView = collectionView
 
     switch model.kind {

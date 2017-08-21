@@ -229,7 +229,6 @@ open class SpotsScrollView: NSScrollView {
         frame.origin.y = self.contentOffset.y
       }
 
-      let remainingBoundsHeight = fmax(documentView!.visibleRect.maxY - frame.minY, 0.0)
       let contentHeight: CGFloat
       var shouldResize: Bool = true
 
@@ -247,7 +246,6 @@ open class SpotsScrollView: NSScrollView {
         contentHeight = scrollView.frame.size.height
       }
 
-      let remainingContentHeight = fmax(contentHeight - contentOffset.y, 0.0)
       frame.size.width = ceil(componentsView.frame.size.width)
       frame.size.height = contentHeight
       frame.origin.y = yOffsetOfCurrentSubview

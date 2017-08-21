@@ -103,11 +103,7 @@ public class ComponentFlowLayout: FlowLayout {
       }
 
       if let scrollView = collectionView.enclosingScrollView {
-        let visibleRect = scrollView.contentView.visibleRect
-//        let additionalOffset: CGFloat = 0
-//        visibleRect.origin.y -= additionalOffset
-//        visibleRect.size.height += additionalOffset
-        guard visibleRect.intersects(itemAttribute.frame) else {
+        guard scrollView.contentView.visibleRect.intersects(itemAttribute.frame) else {
           continue
         }
       }
