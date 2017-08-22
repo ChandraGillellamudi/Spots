@@ -26,8 +26,6 @@ extension Component {
     tableView.action = #selector(self.singleMouseClick(_:))
     tableView.doubleAction = #selector(self.doubleMouseClick(_:))
 
-    scrollView.documentView = tableView
-
     guard tableView.tableColumns.isEmpty else {
       return
     }

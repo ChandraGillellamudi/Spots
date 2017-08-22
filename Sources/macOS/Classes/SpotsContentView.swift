@@ -45,7 +45,7 @@ open class SpotsContentView: NSView {
    */
   override open func willRemoveSubview(_ subview: View) {
     super.willRemoveSubview(subview)
-    rebuildSubviewsInLayoutOrder()
+    rebuildSubviewsInLayoutOrder(subview)
     resolveSpotsScrollView { scrollView in
       scrollView.willRemoveSubview(subview)
     }
@@ -77,8 +77,8 @@ open class SpotsContentView: NSView {
   }
 
   /// Rebuild the `subviewsInLayoutOrder`.
-  private func rebuildSubviewsInLayoutOrder() {
+  private func rebuildSubviewsInLayoutOrder(_ subview: View? = nil) {
     subviewsInLayoutOrder.removeAll()
-    subviewsInLayoutOrder = subviews
+    subviewsInLayoutOrder = subviews.filter({ !($0 === subview) })
   }
 }

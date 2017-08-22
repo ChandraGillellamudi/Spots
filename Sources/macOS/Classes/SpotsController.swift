@@ -185,17 +185,17 @@ open class SpotsController: NSViewController, SpotsProtocol {
     super.viewWillAppear()
 
     setupComponents()
-    scrollView.layoutViews(animated: false)
+//    scrollView.layoutViews(animated: false)
   }
 
   open override func viewDidAppear() {
     super.viewDidAppear()
 
-    for component in components {
-      component.layout(with: scrollView.frame.size)
-    }
+//    for component in components {
+//      component.layout(with: scrollView.frame.size)
+//    }
 
-    scrollView.layoutViews()
+//    scrollView.layoutViews(animated: false)
   }
 
   public func reloadSpots(components: [Component], closure: (() -> Void)?) {
@@ -227,6 +227,7 @@ open class SpotsController: NSViewController, SpotsProtocol {
     component.model.size = CGSize(
       width: view.frame.width,
       height: ceil(component.view.frame.height))
+    component.afterUpdate()
 
     if component.view.superview == nil {
       scrollView.componentsView.addSubview(component.view)

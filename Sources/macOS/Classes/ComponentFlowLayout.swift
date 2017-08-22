@@ -34,6 +34,11 @@ public class ComponentFlowLayout: FlowLayout {
 
     for index in 0..<dataSource.numberOfItems {
       if let itemAttribute = self.layoutAttributesForItem(at: IndexPath(item: index, section: 0)) {
+        if let scrollView = component.view.enclosingScrollView, scrollDirection != .horizontal {
+          guard scrollView.contentView.visibleRect.intersects(itemAttribute.frame) else {
+            continue
+          }
+        }
         layoutAttributes.append(itemAttribute)
       }
     }
@@ -100,12 +105,6 @@ public class ComponentFlowLayout: FlowLayout {
     for attribute in newAttributes {
       guard let itemAttribute = attribute.copy() as? NSCollectionViewLayoutAttributes else {
         continue
-      }
-
-      if let scrollView = collectionView.enclosingScrollView {
-        guard scrollView.contentView.visibleRect.intersects(itemAttribute.frame) else {
-          continue
-        }
       }
 
       guard let indexPath = itemAttribute.indexPath else {

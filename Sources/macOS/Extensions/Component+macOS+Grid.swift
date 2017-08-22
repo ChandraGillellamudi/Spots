@@ -8,6 +8,7 @@ extension Component {
     }
 
     collectionView.frame.size.width = size.width
+    collectionView.frame.origin.y = headerHeight
     collectionViewLayout.prepare()
     collectionViewLayout.invalidateLayout()
 
@@ -15,12 +16,14 @@ extension Component {
       return
     }
 
-    let collectionViewContentSize = collectionViewLayout.collectionViewContentSize
-    let newHeight = collectionViewContentSize.height > size.height
-      ? size.height
-      : collectionViewContentSize.height
-    collectionView.frame.size.width = collectionViewContentSize.width
+    var collectionViewContentSize = collectionViewLayout.collectionViewContentSize
+    collectionViewContentSize.height += headerHeight + footerHeight
+    collectionViewContentSize.height += CGFloat(model.layout.inset.top + model.layout.inset.bottom)
     collectionView.frame.size.height = collectionViewContentSize.height
+    collectionView.frame.size.width = collectionViewContentSize.width
+
+    scrollView.documentView?.frame.size = collectionViewContentSize
+    scrollView.frame.size.height = collectionView.frame.height
   }
 
   func resizeVerticalCollectionView(_ collectionView: CollectionView, with size: CGSize, type: ComponentResize) {

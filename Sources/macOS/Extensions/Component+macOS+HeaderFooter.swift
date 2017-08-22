@@ -28,7 +28,7 @@ extension Component {
           tableHeaderView.addSubview(headerView)
           tableView?.headerView = tableHeaderView
         } else if let collectionView = collectionView {
-//          scrollView.addSubview(headerView)
+          scrollView.addSubview(headerView)
         }
       }
     }

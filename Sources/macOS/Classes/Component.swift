@@ -159,6 +159,7 @@ import Tailor
     self.model = model
     self.userInterface = userInterface
     super.init()
+    self.scrollView.documentView = FlippedView()
     registerDefaultIfNeeded(view: DefaultItemView.self)
     userInterface.register()
     self.componentDataSource = DataSource(component: self)
@@ -231,8 +232,10 @@ import Tailor
     configureDataSourceAndDelegate()
 
     if let tableView = self.tableView {
+      scrollView.documentView = tableView
       setupTableView(tableView, with: size)
     } else if let collectionView = self.collectionView {
+      scrollView.documentView = collectionView
       setupCollectionView(collectionView, with: size)
     }
 
@@ -246,6 +249,7 @@ import Tailor
   /// - Parameter animated: Determines if the `Component` should perform animation when
   ///                       applying its new size.
   public func layout(with size: CGSize, animated: Bool = true) {
+    scrollView.contentInsets.top = headerHeight
     if let tableView = self.tableView {
       let instance = animated ? tableView.animator() : tableView
       layoutTableView(instance, with: size)
@@ -292,7 +296,6 @@ import Tailor
     let backgroundView = NSView()
     backgroundView.wantsLayer = true
     collectionView.backgroundView = backgroundView
-    scrollView.documentView = collectionView
 
     switch model.kind {
     case .carousel:
@@ -401,12 +404,12 @@ import Tailor
       let size = CGSize(width: superview.frame.width,
                         height: view.frame.height)
       layout(with: size)
-
-      guard model.kind == .carousel else {
-        return
-      }
-      scrollView.scrollingEnabled = (model.items.count > 1)
-      scrollView.hasHorizontalScroller = (model.items.count > 1)
     }
+
+    guard model.kind == .carousel else {
+      return
+    }
+    scrollView.scrollingEnabled = (model.items.count > 1)
+    scrollView.hasHorizontalScroller = (model.items.count > 1)
   }
 }

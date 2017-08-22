@@ -63,7 +63,6 @@ open class SpotsScrollView: NSScrollView {
 
   override init(frame frameRect: NSRect) {
     super.init(frame: frameRect)
-    let flippedView = FlippedView()
     self.documentView = componentsView
     drawsBackground = false
     scrollsDynamically = true
@@ -140,7 +139,6 @@ open class SpotsScrollView: NSScrollView {
       observeView(subview)
     }
 
-    applyTabFix()
     layoutViews(animated: true)
   }
 
@@ -157,11 +155,14 @@ open class SpotsScrollView: NSScrollView {
   /// - Parameter subview: The subview that will be removed.
   open override func willRemoveSubview(_ subview: View) {
     unobserveView(subview)
-    applyTabFix()
     layoutViews(animated: true)
   }
 
   open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    if keyPath == "contentLayoutRect" {
+      applyTabFix()
+    }
+
     guard let change = change, context == subviewContext else {
       return
     }
@@ -187,7 +188,7 @@ open class SpotsScrollView: NSScrollView {
   }
 
   open override func viewDidMoveToWindow() {
-    layoutSubtreeIfNeeded()
+    layoutViews(animated: false)
   }
 
   open override func layoutSubtreeIfNeeded() {
@@ -199,19 +200,7 @@ open class SpotsScrollView: NSScrollView {
   ///
   /// - Parameter animated: Determines if animations should be used when updating the frames of the
   ///                       underlaying views.
-  public func layoutViews(animated: Bool = true) {
-    guard superview != nil else {
-      return
-    }
-
-    guard let window = window else {
-      return
-    }
-
-    guard let superview = superview else {
-      return
-    }
-
+  public func layoutViews(animated: Bool = false) {
     componentsView.frame.size.width = bounds.size.width
 
     var yOffsetOfCurrentSubview: CGFloat = 0.0
@@ -232,7 +221,7 @@ open class SpotsScrollView: NSScrollView {
       let contentHeight: CGFloat
       var shouldResize: Bool = true
 
-      guard let scrollViewDocumentView = scrollView.documentView else {
+      guard let scrollViewDocumentView = scrollView.documentView?.subviews.first else {
         return
       }
 
@@ -246,9 +235,12 @@ open class SpotsScrollView: NSScrollView {
         contentHeight = scrollView.frame.size.height
       }
 
+      let remainingBoundsHeight = fmax(documentView!.visibleRect.maxY - frame.minY, 0.0)
+      let remainingContentHeight = fmax(contentHeight - contentOffset.y, 0.0)
+
       frame.size.width = ceil(componentsView.frame.size.width)
-      frame.size.height = contentHeight
-      frame.origin.y = yOffsetOfCurrentSubview
+      frame.size.height = fmax(remainingBoundsHeight, remainingContentHeight)
+//      frame.origin.y = yOffsetOfCurrentSubview
       yOffsetOfCurrentSubview += contentHeight
 
       if shouldResize {
@@ -261,6 +253,8 @@ open class SpotsScrollView: NSScrollView {
           CATransaction.commit()
         }
       }
+
+      scrollView.contentView.scroll(to: self.contentOffset)
     }
 
     let frameComparison: CGFloat = frame.height - contentInsets.top - CGFloat(self.inset?.bottom ?? 0.0)
