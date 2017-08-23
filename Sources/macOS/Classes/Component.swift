@@ -235,7 +235,6 @@ import Tailor
     }
 
     layoutHeaderFooterViews(size)
-    view.layoutSubviews()
 
     if model.items.isEmpty, !model.layout.showEmptyComponent {
       if animated {
