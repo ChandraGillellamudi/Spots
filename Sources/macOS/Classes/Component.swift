@@ -98,9 +98,7 @@ import Tailor
   }
   /// A scroll view container that is used to construct a unified scrolling experience
   /// when using multiple components inside of a controller.
-  open lazy var scrollView: ScrollView = ScrollView(documentView: self.documentView)
-  /// A normal view with a flipped coordinates system.
-  open lazy var documentView: FlippedView = FlippedView()
+  open lazy var scrollView: ComponentScrollView = ComponentScrollView()
   /// The height of the header view.
   var headerHeight: CGFloat {
     guard let headerView = headerView else {
@@ -211,10 +209,10 @@ import Tailor
     configureDataSourceAndDelegate()
 
     if let tableView = self.tableView {
-      documentView.addSubview(tableView)
+      scrollView.documentView = tableView
       setupTableView(tableView, with: size)
     } else if let collectionView = self.collectionView {
-      documentView.addSubview(collectionView)
+      scrollView.documentView = collectionView
       setupCollectionView(collectionView, with: size)
     }
 

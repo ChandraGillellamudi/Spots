@@ -172,7 +172,6 @@ open class SpotsController: NSViewController, SpotsProtocol {
     super.viewWillAppear()
 
     setupComponents()
-    scrollView.layoutViews()
   }
 
   open override func viewDidAppear() {
@@ -182,7 +181,7 @@ open class SpotsController: NSViewController, SpotsProtocol {
       component.layout(with: scrollView.frame.size)
     }
 
-    scrollView.layoutViews()
+    scrollView.layoutViews(animated: false)
   }
 
   public func reloadSpots(components: [Component], closure: (() -> Void)?) {
@@ -209,15 +208,15 @@ open class SpotsController: NSViewController, SpotsProtocol {
   }
 
   public func setupComponent(at index: Int, component: Component) {
-    if component.view.superview == nil {
-      scrollView.componentsView.addSubview(component.view)
-    }
-
     components[index].model.index = index
     component.setup(with: CGSize(width: view.frame.width, height: view.frame.size.height))
     component.model.size = CGSize(
       width: view.frame.width,
       height: ceil(component.view.frame.height))
+
+    if component.view.superview == nil {
+      scrollView.componentsView.addSubview(component.view)
+    }
   }
 
   public func deselectAllExcept(selectedComponent: Component) {
@@ -230,7 +229,6 @@ open class SpotsController: NSViewController, SpotsProtocol {
 
   open override func viewDidLayout() {
     super.viewDidLayout()
-
     scrollView.layoutViews(animated: false)
   }
 

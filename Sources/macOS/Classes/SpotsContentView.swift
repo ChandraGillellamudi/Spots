@@ -65,6 +65,14 @@ open class SpotsContentView: NSView {
     }
   }
 
+  open override func scroll(_ point: NSPoint) {
+    super.scroll(point)
+
+    resolveSpotsScrollView { spotsScrollView in
+      spotsScrollView.layoutViews(animated: false)
+    }
+  }
+
   /// Resolve `SpotsScrollView` based of the `SpotsContentView`'s superview.
   ///
   /// - Parameter closure: A closure that returns the resolved `SpotsScrollView`.
