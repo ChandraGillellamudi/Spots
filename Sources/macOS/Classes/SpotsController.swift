@@ -179,6 +179,7 @@ open class SpotsController: NSViewController, SpotsProtocol {
   open override func viewWillAppear() {
     super.viewWillAppear()
     setupComponents()
+    scrollView.layoutViews(animated: false)
   }
 
   /// Called when the view controller’s view is fully transitioned onto the screen.
@@ -190,8 +191,8 @@ open class SpotsController: NSViewController, SpotsProtocol {
   /// Reload controller with a new set of components.
   ///
   /// - Parameters:
-  ///   - components: <#components description#>
-  ///   - closure: <#closure description#>
+  ///   - components: The new collection of components.
+  ///   - closure: A completion closure that is invoked when the components are setup.
   public func reloadComponents(_ components: [Component], closure: (() -> Void)?) {
     for component in self.components {
       component.delegate = nil
@@ -230,6 +231,8 @@ open class SpotsController: NSViewController, SpotsProtocol {
     if component.view.superview == nil {
       scrollView.componentsView.addSubview(component.view)
     }
+
+    scrollView.display()
   }
 
   /// Deselect all selections on all components except a specific one.

@@ -25,6 +25,7 @@ extension Component {
     collectionView.frame.size.height = newCollectionViewHeight
     collectionView.frame.size.height += headerHeight
 
+    scrollView.scrollingEnabled = true
     scrollView.frame.size.width = size.width
     scrollView.scrollerInsets.bottom = footerHeight
   }

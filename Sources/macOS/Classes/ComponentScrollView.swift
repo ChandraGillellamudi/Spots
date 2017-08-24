@@ -14,6 +14,14 @@ class ComponentClipView: NSClipView {
   ///
   /// - Parameter newOrigin: The new origin.
   override func scroll(to newOrigin: NSPoint) {
+    if let collectionView = documentView as? CollectionView {
+      if (collectionView.collectionViewLayout as? FlowLayout)?.scrollDirection == .horizontal {
+
+        super.scroll(to: newOrigin)
+        return
+      }
+    }
+
     guard let scrollView = superview?.enclosingScrollView as? SpotsScrollView else {
       super.scroll(newOrigin)
       return
@@ -44,7 +52,6 @@ open class ComponentScrollView: NSScrollView {
   override init(frame frameRect: NSRect) {
     super.init(frame: frameRect)
     drawsBackground = false
-    hasHorizontalScroller = false
     hasVerticalScroller = false
     scrollsDynamically = true
     automaticallyAdjustsContentInsets = false
@@ -62,7 +69,7 @@ open class ComponentScrollView: NSScrollView {
   ///
   /// - Parameter theEvent: The scroll wheel event that the view recieved.
   override open func scrollWheel(with theEvent: NSEvent) {
-    if theEvent.scrollingDeltaX != 0.0 && horizontalScroller != nil && scrollingEnabled {
+    if theEvent.scrollingDeltaX != 0.0 && scrollingEnabled {
       super.scrollWheel(with: theEvent)
     } else if theEvent.scrollingDeltaY != 0.0 {
       nextResponder?.scrollWheel(with: theEvent)

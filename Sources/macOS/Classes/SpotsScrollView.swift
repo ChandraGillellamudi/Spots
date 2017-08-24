@@ -129,8 +129,8 @@ open class SpotsScrollView: NSScrollView {
       let remainingBoundsHeight = fmax(self.documentView!.visibleRect.maxY - frame.minY, 0.0)
       let remainingContentHeight = fmax(contentSize.height - contentOffset.y, 0.0)
       let newHeight = fmin(remainingBoundsHeight, remainingContentHeight)
-      frame.size.width = self.frame.size.width
-      frame.size.height = newHeight
+      frame.size.width = round(self.frame.size.width)
+      frame.size.height = round(newHeight)
 
       if shouldResize {
         switch animated {
@@ -150,6 +150,7 @@ open class SpotsScrollView: NSScrollView {
       } else {
         scrollView.frame.origin.y = yOffsetOfCurrentSubview
         scrollView.frame.size.height = contentSize.height
+        scrollView.documentView?.frame.size.width = 0.0
         scrollView.documentView?.frame.size = contentSize
       }
 
