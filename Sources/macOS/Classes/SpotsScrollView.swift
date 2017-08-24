@@ -133,11 +133,12 @@ open class SpotsScrollView: NSScrollView {
       frame.size.height = newHeight
 
       if shouldResize {
-        if animated == true {
+        switch animated {
+        case true:
           scrollView.animator().frame = frame
           scrollView.animator().frame.size.width = self.frame.width
           scrollView.animator().documentView?.frame.size.height = contentSize.height
-        } else {
+        case false:
           CATransaction.begin()
           CATransaction.setDisableActions(true)
           scrollView.frame = frame
@@ -145,9 +146,13 @@ open class SpotsScrollView: NSScrollView {
           scrollView.documentView?.frame.size.height = contentSize.height
           CATransaction.commit()
         }
+        (scrollView.contentView as? ComponentClipView)?.scrollWithSuperView(contentOffset)
+      } else {
+        scrollView.frame.origin.y = yOffsetOfCurrentSubview
+        scrollView.frame.size.height = contentSize.height
+        scrollView.documentView?.frame.size = contentSize
       }
 
-      (scrollView.contentView as? ComponentClipView)?.scrollWithSuperView(contentOffset)
       yOffsetOfCurrentSubview += contentSize.height
     }
 
