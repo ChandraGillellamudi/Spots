@@ -1,6 +1,7 @@
 import Cocoa
 
 open class SpotsScrollView: NSScrollView {
+  /// Use the flipped coordinates system so that origin.y = 0 is at the top left corner.
   override open var isFlipped: Bool { return true }
 
   /// When enabled, the last `Component` in the collection will be stretched to occupy the remaining space.
@@ -30,12 +31,17 @@ open class SpotsScrollView: NSScrollView {
   /// The document view of SpotsScrollView.
   lazy open var componentsView: SpotsContentView = SpotsContentView()
 
+  /// Initializes and returns a newly allocated NSView object with a specified frame rectangle.
+  ///
+  /// - Parameter frameRect: The frame rectangle for the created view object.
   override init(frame frameRect: NSRect) {
     super.init(frame: frameRect)
     self.documentView = componentsView
     drawsBackground = false
 
-    NotificationCenter.default.addObserver(self, selector: #selector(boundsDidChange), name: NSNotification.Name.NSViewBoundsDidChange, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(contentViewBoundsDidChange),
+                                           name: NSNotification.Name.NSViewBoundsDidChange,
+                                           object: contentView)
     contentView.postsBoundsChangedNotifications = true
   }
 
@@ -48,7 +54,8 @@ open class SpotsScrollView: NSScrollView {
     NotificationCenter.default.removeObserver(self)
   }
 
-  func boundsDidChange() {
+  /// The bounds of the scroll view clip view did change.
+  func contentViewBoundsDidChange() {
     guard let window = window else {
       return
     }
@@ -89,19 +96,21 @@ open class SpotsScrollView: NSScrollView {
   ///                       underlaying views.
   public func layoutViews(animated: Bool = true) {
     var yOffsetOfCurrentSubview: CGFloat = CGFloat(self.inset?.top ?? 0.0)
-    let lastView = componentsView.subviewsInLayoutOrder.last
+
     for case let scrollView as ScrollView in componentsView.subviewsInLayoutOrder {
       guard let documentView: View = scrollView.documentView else {
         return
       }
 
-      var contentSize: CGSize
+      var contentSize: CGSize = .zero
       var shouldResize: Bool = true
 
       switch documentView {
       case let collectionView as NSCollectionView:
-        shouldResize = (collectionView.collectionViewLayout as! ComponentFlowLayout).scrollDirection == .vertical
-        contentSize = (collectionView.collectionViewLayout as! ComponentFlowLayout).contentSize
+        if let flowLayout = (collectionView.collectionViewLayout as? ComponentFlowLayout) {
+          shouldResize = flowLayout.scrollDirection == .vertical
+          contentSize = flowLayout.contentSize
+        }
       default:
         contentSize = documentView.frame.size
       }
@@ -137,8 +146,8 @@ open class SpotsScrollView: NSScrollView {
           CATransaction.commit()
         }
       }
-      (scrollView.contentView as? ComponentClipView)?.scrollWithSuperView(contentOffset)
 
+      (scrollView.contentView as? ComponentClipView)?.scrollWithSuperView(contentOffset)
       yOffsetOfCurrentSubview += contentSize.height
     }
 
@@ -153,7 +162,6 @@ open class SpotsScrollView: NSScrollView {
     }
 
     let frameComparison: CGFloat = frame.height - contentInsets.top - CGFloat(self.inset?.bottom ?? 0.0)
-
     documentView?.setFrameSize(CGSize(width: frame.width, height: fmax(yOffsetOfCurrentSubview, frameComparison)))
 
     if let view = superview {
@@ -164,6 +172,6 @@ open class SpotsScrollView: NSScrollView {
   open override func layoutSubtreeIfNeeded() {
     super.layoutSubtreeIfNeeded()
 
-    //layoutViews(animated: false)
+    layoutViews(animated: false)
   }
 }

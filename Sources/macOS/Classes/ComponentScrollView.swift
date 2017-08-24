@@ -1,13 +1,21 @@
 import Cocoa
 
 class ComponentClipView: NSClipView {
-
+  /// This method is used to avoid recursion when `SpotsScrollView`
+  /// scrolls the underlaying view.
+  ///
+  /// - Parameter point: The new origin.
   func scrollWithSuperView(_ point: CGPoint) {
     super.scroll(to: point)
   }
 
+  /// This method is overriden to rely the scrolling to `SpotsScrollView`
+  /// when the `Component` is used inside a `SpotsController.
+  ///
+  /// - Parameter newOrigin: The new origin.
   override func scroll(to newOrigin: NSPoint) {
-    guard let scrollView = enclosingScrollView?.enclosingScrollView as? SpotsScrollView else {
+    guard let scrollView = superview?.enclosingScrollView as? SpotsScrollView else {
+      super.scroll(newOrigin)
       return
     }
 
@@ -15,15 +23,24 @@ class ComponentClipView: NSClipView {
   }
 }
 
+/// A custom implementation of `NSScrollView` used inside `Component`
+/// It hides the vertical scroll indicator and uses a custom `NSClipView`
+/// to properly forward events to its enclosing scroll view so when using
+/// multiple components inside of a controller you get a unified and smooth
+/// scrolling experience.
 open class ComponentScrollView: NSScrollView {
-
+  /// Determines if scrolling is enabled or not.
   var scrollingEnabled: Bool = true
-
+  override open var allowsVibrancy: Bool { return true }
+  /// Override the setter and getter for the vertical scroller to remove it permanently.
   open override var verticalScroller: NSScroller? {
     get { return nil }
     set {}
   }
 
+  /// Initializes and returns a newly allocated NSView object with a specified frame rectangle.
+  ///
+  /// - Parameter frameRect: The frame rectangle for the created view object.
   override init(frame frameRect: NSRect) {
     super.init(frame: frameRect)
     drawsBackground = false
@@ -39,20 +56,16 @@ open class ComponentScrollView: NSScrollView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  open override func scroll(_ point: NSPoint) {
-    super.scroll(point)
-    Swift.print("\(#file):\(#function):\(#line)")
-  }
-
+  /// If a user scrolls vertically, the even should be forwarded to the
+  /// enclosing scroll view. See the class documentation for more information
+  /// about the desired behavior.
+  ///
+  /// - Parameter theEvent: The scroll wheel event that the view recieved.
   override open func scrollWheel(with theEvent: NSEvent) {
     if theEvent.scrollingDeltaX != 0.0 && horizontalScroller != nil && scrollingEnabled {
       super.scrollWheel(with: theEvent)
     } else if theEvent.scrollingDeltaY != 0.0 {
       nextResponder?.scrollWheel(with: theEvent)
     }
-  }
-
-  override open var allowsVibrancy: Bool {
-    return true
   }
 }

@@ -65,6 +65,10 @@ open class SpotsContentView: NSView {
     }
   }
 
+  /// Scrolls the view’s closest ancestor NSClipView object so a point in the view lies at the origin of the clip view's bounds rectangle.
+  /// When invoked, the parent view (namely `SpotsScrollView`) will recieve instructions to layout its underlaying views.
+  ///
+  /// - Parameter point: The point in the view to scroll to.
   open override func scroll(_ point: NSPoint) {
     super.scroll(point)
 

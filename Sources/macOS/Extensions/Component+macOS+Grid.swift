@@ -8,7 +8,6 @@ extension Component {
     }
 
     collectionView.frame.size.width = size.width
-//    collectionView.frame.origin.y = headerHeight
     collectionViewLayout.prepare()
     collectionViewLayout.invalidateLayout()
 

@@ -156,7 +156,8 @@ import Tailor
     var userInterface: UserInterface! = userInterface
 
     if userInterface == nil, model.kind == .list {
-      userInterface = TableView()
+      let tableView = TableView()
+      userInterface = tableView
     } else {
       let collectionView = CollectionView(frame: CGRect.zero)
       collectionView.collectionViewLayout = ComponentFlowLayout()
@@ -164,6 +165,8 @@ import Tailor
     }
 
     self.init(model: model, userInterface: userInterface!)
+
+    scrollView.documentView = userInterface as? View
 
     if model.kind == .carousel {
       self.model.interaction.scrollDirection = .horizontal
@@ -187,6 +190,7 @@ import Tailor
     userInterface = nil
   }
 
+  /// Configure user interface data source and delegate.
   fileprivate func configureDataSourceAndDelegate() {
     if let tableView = self.tableView {
       tableView.dataSource = componentDataSource
@@ -209,10 +213,8 @@ import Tailor
     configureDataSourceAndDelegate()
 
     if let tableView = self.tableView {
-      scrollView.documentView = tableView
       setupTableView(tableView, with: size)
     } else if let collectionView = self.collectionView {
-      scrollView.documentView = collectionView
       setupCollectionView(collectionView, with: size)
     }
 
@@ -294,6 +296,12 @@ import Tailor
     }
   }
 
+  /// Handle resizing of component when the window size changes.
+  ///
+  /// - Parameters:
+  ///   - collectionView: The collection view instance.
+  ///   - size: The new size of the parent.
+  ///   - type: Determines if resizing is live or if it ended.
   fileprivate func resizeCollectionView(_ collectionView: CollectionView, with size: CGSize, type: ComponentResize) {
     if model.kind == .carousel {
       resizeHorizontalCollectionView(collectionView, with: size, type: type)
@@ -345,6 +353,15 @@ import Tailor
     delegate?.component(self, itemSelected: item)
   }
 
+  /// This method is invoked when the window is resized. It is called inside `SpotsController`.
+  ///
+  /// - Parameters:
+  ///   - size: The new size of the parent frame.
+  ///   - type: The resizing context determines if the user is currently resizing the window or
+  ///           if they stopped resizing. It contains the following cases: `.live`, `.end`.
+  ///           `.live` is when the user is activly resizing and `.ended` is what the name implies,
+  ///           when the user stopped resizing the window and the `Component` should get its final
+  ///           size.
   public func didResize(size: CGSize, type: ComponentResize) {
     if !compositeComponents.isEmpty && type == .end {
       reload(nil)
