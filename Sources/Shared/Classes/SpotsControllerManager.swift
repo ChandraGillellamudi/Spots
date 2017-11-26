@@ -312,7 +312,7 @@ public class SpotsControllerManager {
 
       for (index, change) in changes.enumerated() {
         switch change {
-        case .identifier, .kind, .layout, .meta:
+        case .identifier, .kind, .layout, .meta, .controller:
           strongSelf.replaceComponent(atIndex: index, controller: controller, newComponentModels: newComponentModels)
         case .new:
           strongSelf.newComponent(atIndex: index, controller: controller, newComponentModels: newComponentModels)
@@ -443,6 +443,7 @@ public class SpotsControllerManager {
       controller.setupComponents(animated: animated)
       controller.components.forEach { component in
         component.afterUpdate()
+        component.controller?.componentDidUpdate(component)
       }
 
       SpotsController.componentsDidReloadComponentModels?(controller)
@@ -480,6 +481,7 @@ public class SpotsControllerManager {
       controller.setupComponents(animated: animated)
       controller.components.forEach { component in
         component.afterUpdate()
+        component.controller?.componentDidUpdate(component)
       }
 
       SpotsController.componentsDidReloadComponentModels?(controller)

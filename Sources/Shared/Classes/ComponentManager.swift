@@ -479,16 +479,30 @@ public class ComponentManager {
       if updateHeightAndIndexes {
         component.updateHeightAndIndexes {
           component.afterUpdate()
+          component.controller?.componentDidUpdate(component)
           component.view.superview?.setNeedsLayout()
           component.view.superview?.layoutIfNeeded()
           completion?()
         }
       } else {
         component.afterUpdate()
+        component.controller?.componentDidUpdate(component)
         component.view.superview?.setNeedsLayout()
         component.view.superview?.layoutIfNeeded()
         completion?()
       }
     }
+  }
+
+  func resolveController(in component: Component) -> ComponentController? {
+    guard let controllerIdentifier = component.model.controller,
+      let container = component.configuration.controllers[controllerIdentifier]
+      else {
+        return nil
+    }
+
+    let componentController = container.construct(component: component)
+
+    return componentController
   }
 }

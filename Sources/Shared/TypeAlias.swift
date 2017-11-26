@@ -24,6 +24,8 @@ public typealias Completion = (() -> Void)?
   public typealias FlowLayout = NSCollectionViewFlowLayout
   /// A type alias for scrollable views
   public typealias ScrollableView = SpotsScrollView
+  /// A type alias for view controller
+  public typealias ViewController = NSViewController
 #else
   /// A type alias to reference a view passed to delegate method
   public typealias ComponentView = UIView
@@ -45,4 +47,6 @@ public typealias Completion = (() -> Void)?
   public typealias EdgeInsets = UIEdgeInsets
   /// A type alias for scrollable views
   public typealias ScrollableView = UIScrollView
+  /// A type alias for view controller
+  public typealias ViewController = UIViewController
 #endif

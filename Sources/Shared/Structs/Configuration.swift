@@ -12,6 +12,15 @@ struct PlatformDefaults {
   #endif
 }
 
+struct ControllerContainer {
+  var type: ComponentController.Type
+  var injection: ((ComponentController) -> Void)?
+
+  func construct(component: Component) -> ComponentController {
+    return type.init(component: component, injection: injection)
+  }
+}
+
 public class Configuration {
   public static let shared: Configuration = Configuration()
 
@@ -31,10 +40,10 @@ public class Configuration {
   ///  --------   --------
   /// ```
   public var stretchLastComponent: Bool = false
-
   public var defaultComponentKind: ComponentKind = .grid
   public var defaultViewSize: CGSize = .init(width: 0, height: PlatformDefaults.defaultHeight)
   public var views: Registry = .init()
+  var controllers: [String: ControllerContainer] = .init()
   var presenters: [String: AnyPresenter] = .init()
   var coders: [String: AnyItemModelCoder] = .init()
 
@@ -69,5 +78,9 @@ public class Configuration {
   /// - parameter view: The view type that should be used as the default view
   public func registerDefault(view: View.Type) {
     views.defaultItem = Registry.Item.classType(view)
+  }
+
+  public func register(controller type: ComponentController.Type, injection: ((ComponentController) -> Void)? = nil, identifier: StringConvertible) {
+    controllers[identifier.string] = ControllerContainer(type: type, injection: injection)
   }
 }

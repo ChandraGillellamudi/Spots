@@ -32,6 +32,8 @@ extension Delegate: UIScrollViewDelegate {
     #endif
 
     if let component = component {
+      component.controller?.componentDidScroll(component)
+
       if let footerView = component.footerView {
         scrollViewManager.positionFooterView(footerView, in: scrollView)
       }

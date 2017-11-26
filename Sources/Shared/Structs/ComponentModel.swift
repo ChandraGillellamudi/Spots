@@ -18,6 +18,7 @@ public struct ComponentModel: Codable, Equatable {
     case items
     case size
     case meta
+    case controller
     case amountOfItemsToCache
   }
 
@@ -42,6 +43,8 @@ public struct ComponentModel: Codable, Equatable {
   public var size: CGSize = .zero
   /// A key-value dictionary for any additional information
   public var meta = [String: Any]()
+  /// An identifier used to resolve controllers
+  public var controller: String?
   /// An optional Int that is used to limit the amount of items that should be transformed into JSON
   public var amountOfItemsToCache: Int?
 
@@ -63,6 +66,7 @@ public struct ComponentModel: Codable, Equatable {
               layout: Layout = Layout(),
               interaction: Interaction = .init(),
               items: [Item] = [],
+              controller: String? = nil,
               meta: [String : Any] = [:]) {
     self.identifier = identifier
     self.kind = kind
@@ -71,6 +75,7 @@ public struct ComponentModel: Codable, Equatable {
     self.header = header
     self.footer = footer
     self.items = items.refreshIndexes()
+    self.controller = controller
     self.meta = meta
   }
 
@@ -92,6 +97,7 @@ public struct ComponentModel: Codable, Equatable {
     self.items = try container.decodeIfPresent([Item].self, forKey: .items)?.refreshIndexes() ?? []
     self.size = try container.decodeIfPresent(Size.self, forKey: .size)?.cgSize ?? .zero
     self.meta = container.decodeJsonDictionaryIfPresent(forKey: .meta) ?? [:]
+    self.controller = try container.decodeIfPresent(String.self, forKey: .controller)
     self.amountOfItemsToCache = try container.decodeIfPresent(Int.self, forKey: .amountOfItemsToCache)
   }
 
@@ -120,6 +126,7 @@ public struct ComponentModel: Codable, Equatable {
     try container.encodeIfPresent(itemsToCache, forKey: .items)
     try container.encodeIfPresent(Size(cgSize: size), forKey: .size)
     container.encode(jsonDictionary: meta, forKey: .meta)
+    try container.encodeIfPresent(controller, forKey: .controller)
     try container.encodeIfPresent(amountOfItemsToCache, forKey: .amountOfItemsToCache)
   }
 
@@ -176,6 +183,11 @@ public struct ComponentModel: Codable, Equatable {
     // Determine if the component layout changed, this can be used to trigger layout related processes
     if layout != model.layout {
       return .layout
+    }
+
+    // Determine if the component layout changed, this can be used to trigger layout related processes
+    if controller != model.controller {
+      return .controller
     }
 
     // Determine if the header for the component has changed

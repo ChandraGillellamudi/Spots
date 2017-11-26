@@ -6,6 +6,8 @@ import Cocoa
   /// A configuration closure that can be used to pinpoint configuration of
   /// views used inside of the component.
   open static var configure: ((Component) -> Void)?
+  /// The component controller that is assign to the component.
+  weak public var controller: ComponentController?
   /// A focus delegate that returns which component is focused.
   weak public var focusDelegate: ComponentFocusDelegate?
   /// A component delegate, used for interaction and to pick up on mutation made to
@@ -163,6 +165,8 @@ import Cocoa
       self.model.interaction.scrollDirection = .horizontal
       collectionView?.flowLayout?.scrollDirection = .horizontal
     }
+
+    self.controller = manager.resolveController(in: self)
   }
 
   /// A convenience init for creating a component with view state functionality.

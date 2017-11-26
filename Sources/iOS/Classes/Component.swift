@@ -6,6 +6,8 @@ public class Component: NSObject, ComponentHorizontallyScrollable {
   /// A configuration closure that can be used to pinpoint configuration of
   /// views used inside of the component.
   open static var configure: ((Component) -> Void)?
+  /// The component controller that is assign to the component.
+  public var controller: ComponentController?
   /// A focus delegate that returns which component is focused.
   weak public var focusDelegate: ComponentFocusDelegate?
   /// A component delegate, used for interaction and to pick up on mutation made to
@@ -110,6 +112,7 @@ public class Component: NSObject, ComponentHorizontallyScrollable {
 
     self.componentDataSource = DataSource(component: self, with: configuration)
     self.componentDelegate = Delegate(component: self, with: configuration)
+    self.controller = manager.resolveController(in: self)
   }
 
   /// A convenience init for creating a component with a `ComponentModel`.
@@ -138,6 +141,7 @@ public class Component: NSObject, ComponentHorizontallyScrollable {
   deinit {
     componentDataSource = nil
     componentDelegate = nil
+    controller = nil
   }
 
   /// Setup up the component with a given size, this is usually the parent size when used in a controller context.
